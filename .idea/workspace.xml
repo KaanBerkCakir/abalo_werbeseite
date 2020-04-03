@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="f82f8969-6074-41f1-bab7-a4b9bd9074ab" name="Default Changelist" comment="">
       <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/flexbox.css" afterDir="false" />
@@ -8,6 +9,12 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+=======
+    <list default="true" id="64732100-d289-4a83-b11b-4ea79397ac4e" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
+>>>>>>> 06ce5f8714d52c570a67c82d202cf5a8ea563821
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,6 +28,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+<<<<<<< HEAD
+=======
+        <option value="TypeScript File" />
+>>>>>>> 06ce5f8714d52c570a67c82d202cf5a8ea563821
         <option value="HTML File" />
         <option value="CSS File" />
       </list>
@@ -30,6 +41,11 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1ZqpxdiefbK3jHAvgNAKbB2P8hN" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
@@ -37,6 +53,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
+<<<<<<< HEAD
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -49,24 +66,45 @@
         </RuleState>
       </list>
     </option>
+=======
+    <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/css" />
+    </key>
+>>>>>>> 06ce5f8714d52c570a67c82d202cf5a8ea563821
   </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
+<<<<<<< HEAD
       <changelist id="f82f8969-6074-41f1-bab7-a4b9bd9074ab" name="Default Changelist" comment="" />
       <created>1585909265272</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1585909265272</updated>
       <workItem from="1585909266374" duration="1983000" />
+=======
+      <changelist id="64732100-d289-4a83-b11b-4ea79397ac4e" name="Default Changelist" comment="" />
+      <created>1585816607633</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1585816607633</updated>
+      <workItem from="1585816612959" duration="4016000" />
+      <workItem from="1585834324225" duration="2479000" />
+      <workItem from="1585841412884" duration="15000" />
+      <workItem from="1585897741582" duration="892000" />
+>>>>>>> 06ce5f8714d52c570a67c82d202cf5a8ea563821
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+<<<<<<< HEAD
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
@@ -77,5 +115,16 @@
         </entry>
       </map>
     </option>
+=======
+  <component name="WindowStateProjectService">
+    <state x="776" y="310" width="424" height="484" key="FileChooserDialogImpl" timestamp="1585819789570">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state x="776" y="310" width="424" height="484" key="FileChooserDialogImpl/67.27.1853.1053@67.27.1853.1053" timestamp="1585819789570" />
+    <state x="657" y="253" key="run.anything.popup" timestamp="1585821286674">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state x="657" y="253" key="run.anything.popup/67.27.1853.1053@67.27.1853.1053" timestamp="1585821286674" />
+>>>>>>> 06ce5f8714d52c570a67c82d202cf5a8ea563821
   </component>
 </project>

@@ -1,0 +1,67 @@
+@import "flex-style.css";
+
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    overflow: auto;
+    background: white;
+}
+
+#container {
+    height: 100%;
+}
+
+#navbar {
+    border-bottom: #393d3f solid 15px;
+    height: 7%;
+    min-height: 60px;
+}
+
+#title {
+    margin-left: 30px;
+}
+
+#title > span:nth-child(1)  {
+    color: #08b1a9;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+#title > span:nth-child(2)  {
+    color: #393d3f;
+    font-size: 10px;
+}
+
+#navbar > span {
+    color: #393d3f;
+    margin-right: 20px;
+}
+
+#navbar > span:hover {
+    cursor: pointer;
+    color: #08b1a9;
+}
+
+#content {
+    background: #e6e6e8;
+    width: 80%;
+}
+
+#card {
+    margin-top: 20px;
+}
+
+#footer {
+    background: #393d3f;
+    min-height: 40px;
+    padding-right: 15px;
+    color: #e6e6e8;
+}
+
+#card {
+    width: 80%;
+
+}
