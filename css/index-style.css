@@ -7,7 +7,7 @@ html, body {
 body {
     margin: 0;
     overflow: auto;
-    background: white;
+    background: #f0f0f0;
 }
 
 #container {
@@ -15,7 +15,6 @@ body {
 }
 
 #navbar {
-    border-bottom: #393d3f solid 15px;
     height: 7%;
     min-height: 60px;
 }
@@ -24,44 +23,106 @@ body {
     margin-left: 30px;
 }
 
-#title > span:nth-child(1)  {
+#title > span:nth-child(1) {
     color: #08b1a9;
-    font-size: 30px;
+    font-size: 35px;
     font-weight: bold;
 }
 
-#title > span:nth-child(2)  {
+#title > span:nth-child(2) {
     color: #393d3f;
     font-size: 10px;
 }
 
-#navbar > span {
-    color: #393d3f;
+input {
+    border: 1px solid #08b1a9;
+    border-radius: 4px;
     margin-right: 20px;
-}
-
-#navbar > span:hover {
-    cursor: pointer;
-    color: #08b1a9;
+    padding: 2px;
 }
 
 #content {
-    background: #e6e6e8;
-    width: 80%;
 }
 
-#card {
-    margin-top: 20px;
+.card {
+    margin: 20px;
+    border: 1px white solid;
+    border-radius: 10px;
+    background: white;
 }
 
-#footer {
+#sidenav {
+    width: 12%;
+    min-width: 150px;
+}
+
+#content {
+    padding: 15px;
+}
+
+.item {
+    margin-bottom: 10px;
+}
+
+.item.active {
+    color: #08b1a9;
+}
+
+.link:hover:not(.active){
+    color: #08b1a9;
+    cursor: pointer;
+}
+
+#impressum {
+    padding: 10px 5px;
     background: #393d3f;
-    min-height: 40px;
-    padding-right: 15px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#impressum  span {
+    font-size: 12px;
     color: #e6e6e8;
 }
 
-#card {
+table {
+    margin-top: 20px;
     width: 80%;
+    background: #f0f0f0;
+}
 
+table, th, td {
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 5px solid white;
+}
+th, td {
+    padding: 15px;
+}
+
+tr:hover:not(#head) {
+    background: #393d3f;
+    color: #e6e6e8;
+}
+
+#head > th:nth-child(1) {
+    width: 10%;
+}
+
+#head > th:nth-child(2) {
+    width: 10%;
+}
+
+#head > th:nth-child(3) {
+    width: 50%;
+}
+
+#head > th:nth-child(4) {
+    width: 20%;
+}
+
+#head > th:nth-child(5) {
+    width: 10%;
 }
