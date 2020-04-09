@@ -3,5 +3,8 @@
         <span>Abalo</span>
         <span>Macht Altes Flüssig.</span>
     </div>
-    <input type="text" placeholder="Suche...">
+    <form class="example" action="overview.php">
+        <input type="text" placeholder="Search.." name="search">
+
+    </form>
 </div>
