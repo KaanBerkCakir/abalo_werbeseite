@@ -16,10 +16,10 @@
 
     <div class="grow-1 row">
         <div id="sidenav" class="card column jc-between">
-            <ul>
-                <li class="item link">Übersicht</li>
-                <li class="item link">Anmelden</li>
-            </ul>
+            <div class="column al-center">
+                <span class="item link">Übersicht</span>
+                <span class="item link">Anmelden</span>
+            </div>
             <div id="impressum" class="column je">
                 <span>Kaan Berk Cakir</span>
                 <div class="row jc-between">

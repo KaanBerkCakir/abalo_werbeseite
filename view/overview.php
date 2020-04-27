@@ -6,6 +6,8 @@
 
     <link rel="stylesheet" href="../css/index-style.css">
     <link rel="stylesheet" href="../css/flex-style.css">
+
+    <script src="../js/menu.js"></script>
 </head>
 <body>
 <div id="container" class="column">
@@ -26,10 +28,9 @@
 
     <div class="grow-1 row">
         <div id="sidenav" class="card column jc-between">
-            <ul>
-                <li class="item link active">Übersicht</li>
-                <li class="item link">Anmelden</li>
-            </ul>
+            <div id="menu" class="column al-s-center">
+
+            </div>
             <div id="impressum" class="column je">
                 <span>Kaan Berk Cakir</span>
                 <div class="row jc-between">
@@ -70,5 +71,6 @@
         </div>
     </div>
 </div>
+
 </body>
 </html>
