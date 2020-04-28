@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script>
+    'use strict';
+
+
+    let array = ['erstes', 'zweites',3,4];
+
+
+    //Aufgabenblock A.
+
+    console.log("forEach:");
+    array.forEach(function(item, index, array) {
+        console.log(index, item)
+    });
+    console.log("for:");
+    for (let i = 0; i < array.length; i++) {
+        console.log(i + ' ' + array[i]);
+
+
+    }
+    console.log("while:");
+    let leufer = 0;
+    while (leufer <= array.length - 1) {
+        console.log(leufer + ' ' + array[leufer]);
+        leufer++;
+    }
+
+    //Aufgabenblock B.
+
+    function ausgeben() {
+        array.forEach(function(item, index, array) {
+            console.log(index, item)
+        });
+    }
+
+    console.log("Array Elemente hinzufügen:");
+    array.push('fuenf');
+    array.push(6);
+    ausgeben();
+
+    console.log("Entfernen des letzten Elements:");
+    array.pop();
+    ausgeben();
+
+    console.log("Verändern des Elements an Index 2");
+    array[2] = 'Neuer Wert';
+    ausgeben();
+
+    //Aufgabenblock C.
+    //length
+    console.log("Länge des Arrays: " + array.length);
+    //sort
+    let alphabet = ["B","C","A","E","D"];
+    console.log("alphabet vor sort: " + alphabet[0],alphabet[1],
+        alphabet[2],alphabet[3],alphabet[4]);
+    alphabet.sort();
+    console.log("alphabet nach sort: " + alphabet[0],alphabet[1],
+        alphabet[2],alphabet[3],alphabet[4]);
+    //find
+    let nummer = [1,2,3,4,5,6,7,8];
+    console.log("Erste Nummer größer 5: " + nummer.find(element => element > 5));
+
+    //filter
+    function pruefe(groesse) {
+        return groesse > 5;
+    }
+    console.log("Groesser als 5: " + nummer.filter(pruefe));
+
+    //map
+    let schrumpfNummer = nummer.map(x => x - 1);
+    console.log("nummer - 1:");
+    schrumpfNummer.forEach(function(item, index, array) {
+        console.log(item, index)
+    });
+    //slice
+    console.log("Gesliced von Index 2 bis Index 4");
+    schrumpfNummer.slice(2,5).forEach(function(item, index, array) {
+        console.log(index, item)
+    });
+</script>
+
+</body>
+</html>

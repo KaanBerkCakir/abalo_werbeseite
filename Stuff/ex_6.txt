@@ -1,0 +1,10 @@
+Unterschiede zwischen JavaScript, PHP und C++
+
+	JAVASCRIPT	|	   PHP		|	   C++
+- - - - - - - - - - - - | - - - - - - - - - - - | - - - - - - - - - - - -
+			|			|
+			|			|
+			|			|
+			|			|
+			|			|
+			|			|
