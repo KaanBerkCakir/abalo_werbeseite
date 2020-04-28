@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <p id="demo">Click the button to change the text in this paragraph.</p>
+
+    <p class="klasse">Wir gehören zu einer Klasse</p>
+    <p class="klasse" name="test" >Ja das tun wir</p>
+    <button onclick="elemID()">ID</button>
+    <button onclick="elemClass()">Class</button>
+    <button onclick="elemTag()">Tag</button>
+    <button onclick="elemName()">Name</button>
+
+
+    <script>
+    function elemID() {
+        document.getElementById("demo").innerHTML = "Change 1";
+    }
+
+    function elemClass() {
+        let x = document.getElementsByClassName("klasse");
+        x[0].innerHTML = "Change 2";
+        x[1].innerHTML = "Change 2";
+    }
+
+    function elemTag() {
+            let y = document.getElementsByTagName("p");
+            y[0].innerHTML = "Change 3";
+            y[1].innerHTML = "Change 3";
+            y[2].innerHTML = "Change 3";
+    }
+
+    function elemName() {
+        document.getElementsByName("test")[0].innerHTML  = "Change 4";
+
+    }
+    </script>
+</body>
+</html>
