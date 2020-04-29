@@ -1,0 +1,15 @@
+.cat-card {
+    margin: 10px;
+    border-radius: 10px;
+    min-width: 125px;
+    padding: 20px;
+}
+
+.cat-card-header {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.cat-card-content > span {
+    margin-bottom: 10px;
+}

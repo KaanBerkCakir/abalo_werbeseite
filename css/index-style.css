@@ -53,7 +53,7 @@ input {
 
 #sidenav {
     width: 12%;
-    min-width: 150px;
+    min-width: 200px;
 }
 
 #content {
@@ -68,10 +68,13 @@ input {
 
 .subitem {
     padding: 8px 20px;
-    background: #cff0ee;
 }
 
 .item.active {
+    color: #08b1a9;
+}
+
+.subitem.active {
     color: #08b1a9;
 }
 
@@ -132,4 +135,20 @@ tr:hover:not(#head) {
 
 #head > th:nth-child(5) {
     width: 10%;
+}
+
+.backBlue {
+    background: #cff0ee;
+}
+
+.backGreen {
+    background: #cff0d4;
+}
+
+.backRed {
+    background: #f0d1cf;
+}
+
+.backYellow {
+    background: #ecf0cf;
 }
