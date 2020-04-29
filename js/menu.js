@@ -7,6 +7,25 @@ const menu = ['Home', 'Shop', 'Kategorien', 'Unternehmen'];
 const shop = ['Kaufen', 'Verkaufen'];
 const company = ['Philosophie', 'Karriere'];
 
+const menuJSON = [
+    {
+        item: 'Home',
+        subitems: []
+    },
+    {
+        item: 'Shop',
+        subitems: ['Stöbern', 'Anbieten']
+    },
+    {
+        item: 'Kategorien',
+        subitems: []
+    },
+    {
+        item: 'Unternehmen',
+        subitems: ['Philosophie', 'Karriere']
+    },
+];
+
 var shopIsShown = false;
 var companyIsShown = false;
 
@@ -14,27 +33,12 @@ const color = ['backBlue', 'backGreen', 'backRed', 'backYellow'];
 
 var articlesArray;
 
-var menuClosed = '';
-menu.forEach((elem, index) => {
-    menuClosed += '<span id="item' + index + '" class="item link" onclick="chooseMenu(' + index + ')">' + elem + '</span>';
-});
-
-var menuShopOpened = '';
-menu.forEach((elem, index) => {
-    menuShopOpened += '<span id="item' + index + '" class="item link" onclick="chooseMenu(' + index + ')">' + elem + '</span>';
-    if (index === 1) {
-        shop.forEach((e, i) => {
-            menuShopOpened += '<span id="subitem' + index + i + '" class="subitem link" onclick="chooseMenu(' + index + i + ')">' + e + '</span>';
-        });
-    }
-});
-
-var menuCmpyOpened = '';
-menu.forEach((elem, index) => {
-    menuCmpyOpened += '<span id="item' + index + '" class="item link" onclick="chooseMenu(' + index + ')">' + elem + '</span>';
-    if (index === 3) {
-        company.forEach((e, i) => {
-            menuCmpyOpened += '<span id="subitem' + index + i + '" class="subitem link" onclick="chooseMenu(' + index + i + ')">' + e + '</span>';
+var menuHTML = '';
+menuJSON.forEach((item, itemIndex) => {
+    menuHTML += '<span id="item' + itemIndex + '" class="item link" onclick="chooseMenu(' + itemIndex + ')">' + item.item + '</span>';
+    if (item.subitems.length > 0) {
+        item.subitems.forEach((subitem, subitemIndex) => {
+            menuHTML += '<span id="subitem' + itemIndex + subitemIndex + '" class="subitem link hidden ' + color[itemIndex%4] + '" onclick="chooseMenu(' + itemIndex + subitemIndex + ')">' + subitem + '</span>';
         });
     }
 });
@@ -50,7 +54,7 @@ function initView() {
     if (!localStorage.getItem('cart')) {
         localStorage.setItem('cart', JSON.stringify([]));
     }
-    menuElem.innerHTML = menuClosed;
+    menuElem.innerHTML = menuHTML;
     showHome();
 }
 
@@ -63,16 +67,10 @@ function chooseMenu(num) {
         case 1:
             if (shopIsShown) {
                 shopIsShown = false;
-                menuElem.innerHTML = menuClosed;
+                hideSubitems(num);
             } else {
                 shopIsShown = true;
-                companyIsShown = false;
-                menuElem.innerHTML = menuShopOpened;
-                const subitem = document.getElementsByClassName('subitem');
-                console.log(subitem);
-                for (let elem of subitem) {
-                    elem.classList.add(color[num % 4]);
-                }
+                showSubitems(num);
             }
             break;
         case 10:
@@ -87,16 +85,10 @@ function chooseMenu(num) {
         case 3:
             if (companyIsShown) {
                 companyIsShown = false;
-                menuElem.innerHTML = menuClosed;
+                hideSubitems(num);
             } else {
-                shopIsShown = false;
                 companyIsShown = true;
-                menuElem.innerHTML = menuCmpyOpened;
-                const subitem = document.getElementsByClassName('subitem');
-                console.log(subitem);
-                for (let elem of subitem) {
-                    elem.classList.add(color[num % 4]);
-                }
+                showSubitems(num);
             }
             break;
         case 30:
@@ -180,18 +172,18 @@ function showCart(cart) {
 
         let tableRows = '';
         cart.forEach((elem, index) => {
-                tableRows += '<tr>\n' +
-                    '<td>' + elem.id + '</td>\n' +
-                    '<td>' + elem.ab_name + '</td>\n' +
-                    '<td>' + elem.ab_description + '</td>\n' +
-                    '<td>' + elem.ab_createdate + '</td>\n' +
-                    '<td>' + elem.ab_price + '</td>\n' +
-                    '<td><button onclick="handleRemove(' + index + ')"><i class="fas fa-minus"></i></button></td>\n' +
-                    '</tr>';
+            tableRows += '<tr>\n' +
+                '<td>' + elem.id + '</td>\n' +
+                '<td>' + elem.ab_name + '</td>\n' +
+                '<td>' + elem.ab_description + '</td>\n' +
+                '<td>' + elem.ab_createdate + '</td>\n' +
+                '<td>' + elem.ab_price + '</td>\n' +
+                '<td><button onclick="handleRemove(' + index + ')"><i class="fas fa-minus"></i></button></td>\n' +
+                '</tr>';
         });
 
         const xhr = new XMLHttpRequest();
-        xhr.open('get', 'includes/article_table.html?id='+ Math.random());
+        xhr.open('get', 'includes/article_table.html?id=' + Math.random());
         xhr.onload = () => {
             console.log('10');
             hiddenBox.innerHTML = xhr.response;
@@ -226,13 +218,13 @@ function showArticles(cart) {
         });
 
         const xhr = new XMLHttpRequest();
-        xhr.open('get', 'includes/article_table.html?id='+ Math.random());
+        xhr.open('get', 'includes/article_table.html?id=' + Math.random());
         xhr.onload = () => {
             console.log('20');
             hiddenBox.innerHTML = '';
             hiddenBox.innerHTML = xhr.response;
             const table = document.getElementById('article_table');
-            table.children[0].innerText = 'Artikelgit s';
+            table.children[0].innerText = 'Artikel';
             table.children[1].innerHTML = table.children[1].innerHTML + tableRows;
             table.id = 'cart_table';
             contentContainer.appendChild(table);
@@ -300,10 +292,24 @@ function handleRemove(num) {
 }
 
 function inCard(id, cart) {
-    for(let elem of cart) {
-        if(elem.id === id) return true;
+    for (let elem of cart) {
+        if (elem.id === id) return true;
     }
     return false;
+}
+
+function hideSubitems(num) {
+    const length = menuJSON[num].subitems.length;
+    for (let i = 0; i < length; i++) {
+        document.getElementById('subitem' + num + i).classList.add('hidden');
+    }
+}
+
+function showSubitems(num) {
+    const length = menuJSON[num].subitems.length;
+    for (let i = 0; i < length; i++) {
+        document.getElementById('subitem' + num + i).classList.remove('hidden');
+    }
 }
 
 initView();

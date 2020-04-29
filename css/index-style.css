@@ -78,6 +78,10 @@ input {
     color: #08b1a9;
 }
 
+.hidden {
+    display: none;
+}
+
 .link:hover:not(.active){
     color: #08b1a9;
     cursor: pointer;
