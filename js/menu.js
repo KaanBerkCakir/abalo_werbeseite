@@ -3,10 +3,6 @@ const contentContainer = document.getElementById('content');
 const hiddenBox = document.getElementById('hiddenBox');
 const menuElem = document.getElementById('menu');
 
-const menu = ['Home', 'Shop', 'Kategorien', 'Unternehmen'];
-const shop = ['Kaufen', 'Verkaufen'];
-const company = ['Philosophie', 'Karriere'];
-
 const menuJSON = [
     {
         item: 'Home',
@@ -51,6 +47,7 @@ inputSearch.addEventListener("keyup", function (event) {
 });
 
 function initView() {
+    // localStorage.removeItem('cart');
     if (!localStorage.getItem('cart')) {
         localStorage.setItem('cart', JSON.stringify([]));
     }
@@ -100,9 +97,138 @@ function chooseMenu(num) {
     }
 }
 
+function hideSubitems(num) {
+    const length = menuJSON[num].subitems.length;
+    for (let i = 0; i < length; i++) {
+        document.getElementById('subitem' + num + i).classList.add('hidden');
+    }
+}
+
+function showSubitems(num) {
+    const length = menuJSON[num].subitems.length;
+    for (let i = 0; i < length; i++) {
+        document.getElementById('subitem' + num + i).classList.remove('hidden');
+    }
+}
+
 function showHome() {
     setActive('item0');
     contentContainer.innerHTML = 'Herzlich Willkommen!';
+}
+
+function requestArticles(input) {
+    setActive('subitem10');
+    contentContainer.innerHTML = '';
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://localhost:8000/api/article/find/' + input);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.onload = () => {
+        articlesArray = JSON.parse(xhr.response);
+        const cart = JSON.parse(localStorage.getItem('cart'));
+        showCart(cart);
+        showArticles(cart);
+    }
+    xhr.onerror = function () {
+        console.log('fs', xhr.getAllResponseHeaders());
+    };
+    xhr.send();
+}
+
+function showCart(cart) {
+    if (cart.length > 0) {
+
+        let tableRows = '';
+        cart.forEach((elem, index) => {
+            tableRows += '<li>\n' +
+                '<div  class="row">\n' +
+                '<span>' + elem.ab_name + '</span>\n' +
+                '<span class="al-s-stretch grow-1" style="text-align: end">' + elem.ab_price + '€</span>\n' +
+                '<div>\n' +
+                '<button class="btn" onclick="handleRemove(' + index + ')"><i class="fas fa-minus-circle" style="color: #bc2d2d"></i></button>\n' +
+                '</div>\n' +
+                '</div>\n' +
+                '</li>';
+        });
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', 'includes/shopping_cart.html?id=' + Math.random());
+        xhr.onload = () => {
+            hiddenBox.innerHTML = xhr.response;
+            const table = document.getElementById('shopping-card');
+            table.getElementsByTagName('ul')[0].innerHTML = tableRows;
+            const price = document.getElementById('shopping-card-total-costs');
+            let tmp = 0;
+            for (let item of cart) {
+                tmp += item.ab_price;
+            }
+            price.innerText = tmp + '€';
+            contentContainer.appendChild(table);
+        }
+        xhr.send();
+    } else {
+        contentContainer.innerText = 'Der Warenkorb ist leer.';
+    }
+}
+
+function handleRemove(num) {
+    const items = JSON.parse(localStorage.getItem('cart'));
+    items.splice(num, 1);
+    localStorage.setItem('cart', JSON.stringify(items));
+    contentContainer.innerHTML = '';
+    showCart(items);
+    showArticles(items);
+}
+
+function showArticles(cart) {
+    if (articlesArray.length > 0) {
+
+        let tableRows = '';
+        articlesArray.forEach((elem, index) => {
+            if (!cartContains(elem.id, cart)) {
+                tableRows += '<tr>\n' +
+                    '<td>' + elem.id + '</td>\n' +
+                    '<td>' + elem.ab_name + '</td>\n' +
+                    '<td>' + elem.ab_description + '</td>\n' +
+                    '<td>' + elem.ab_createdate + '</td>\n' +
+                    '<td>' + elem.ab_price + '</td>\n' +
+                    '<td><button onclick="handleAdd(' + index + ')"><i class="fas fa-plus"></i></button></td>\n' +
+                    '</tr>';
+            }
+        });
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', 'includes/article_table.html?id=' + Math.random());
+        xhr.onload = () => {
+            hiddenBox.innerHTML = '';
+            hiddenBox.innerHTML = xhr.response;
+            const table = document.getElementById('article-table');
+            table.innerHTML = table.innerHTML + tableRows;
+            contentContainer.appendChild(table);
+        }
+        xhr.send();
+    } else {
+        contentContainer.innerText = 'Keine Einträge vorhanden';
+    }
+}
+
+function handleAdd(num) {
+    const items = JSON.parse(localStorage.getItem('cart'));
+    items.push(articlesArray[num]);
+    localStorage.setItem('cart', JSON.stringify(items));
+    contentContainer.innerHTML = '';
+    showCart(items);
+    showArticles(items);
+}
+
+function cartContains(id, cart) {
+    for (let elem of cart) {
+        if (elem.id === id) return true;
+    }
+    return false;
+}
+
+function createNewArticle() {
+    alert('Artikel konnte nicht Hinzugefügt werden');
 }
 
 function requestCategories() {
@@ -117,6 +243,31 @@ function requestCategories() {
         console.log('fs', xhr.getAllResponseHeaders());
     };
     xhr.send();
+}
+
+function prepareCategories(result) {
+    const res = [];
+    let name = '';
+    let tmp = [];
+    result.forEach((elem, index) => {
+        if (elem.ab_parent) {
+            tmp.push(elem.ab_name);
+        } else {
+            if (index > 0) {
+                res.push({
+                    parent: name,
+                    children: tmp
+                });
+            }
+            name = elem.ab_name;
+            tmp = [];
+        }
+    });
+    res.push({
+        parent: name,
+        children: tmp
+    });
+    return res;
 }
 
 function showCategories(result) {
@@ -149,119 +300,6 @@ function showCategories(result) {
     xhr.send();
 }
 
-function requestArticles(input) {
-    setActive('subitem10');
-    contentContainer.innerHTML = '';
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:8000/api/article/find/' + input);
-    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhr.onload = () => {
-        articlesArray = JSON.parse(xhr.response);
-        const cart = JSON.parse(localStorage.getItem('cart'));
-        showCart(cart);
-        showArticles(cart);
-    }
-    xhr.onerror = function () {
-        console.log('fs', xhr.getAllResponseHeaders());
-    };
-    xhr.send();
-}
-
-function showCart(cart) {
-    if (cart.length > 0) {
-
-        let tableRows = '';
-        cart.forEach((elem, index) => {
-            tableRows += '<tr>\n' +
-                '<td>' + elem.id + '</td>\n' +
-                '<td>' + elem.ab_name + '</td>\n' +
-                '<td>' + elem.ab_description + '</td>\n' +
-                '<td>' + elem.ab_createdate + '</td>\n' +
-                '<td>' + elem.ab_price + '</td>\n' +
-                '<td><button onclick="handleRemove(' + index + ')"><i class="fas fa-minus"></i></button></td>\n' +
-                '</tr>';
-        });
-
-        const xhr = new XMLHttpRequest();
-        xhr.open('get', 'includes/article_table.html?id=' + Math.random());
-        xhr.onload = () => {
-            console.log('10');
-            hiddenBox.innerHTML = xhr.response;
-            const table = document.getElementById('article_table');
-            table.children[0].innerText = 'Warenkorb';
-            table.children[1].innerHTML = table.children[1].innerHTML + tableRows;
-            table.id = 'cart_table';
-            contentContainer.appendChild(table);
-            console.log('11');
-        }
-        xhr.send();
-    } else {
-        contentContainer.innerText = 'Der Warenkorb ist leer.';
-    }
-}
-
-function showArticles(cart) {
-    if (articlesArray.length > 0) {
-
-        let tableRows = '';
-        articlesArray.forEach((elem, index) => {
-            if (!inCard(elem.id, cart)) {
-                tableRows += '<tr>\n' +
-                    '<td>' + elem.id + '</td>\n' +
-                    '<td>' + elem.ab_name + '</td>\n' +
-                    '<td>' + elem.ab_description + '</td>\n' +
-                    '<td>' + elem.ab_createdate + '</td>\n' +
-                    '<td>' + elem.ab_price + '</td>\n' +
-                    '<td><button onclick="handleAdd(' + index + ')"><i class="fas fa-plus"></i></button></td>\n' +
-                    '</tr>';
-            }
-        });
-
-        const xhr = new XMLHttpRequest();
-        xhr.open('get', 'includes/article_table.html?id=' + Math.random());
-        xhr.onload = () => {
-            console.log('20');
-            hiddenBox.innerHTML = '';
-            hiddenBox.innerHTML = xhr.response;
-            const table = document.getElementById('article_table');
-            table.children[0].innerText = 'Artikel';
-            table.children[1].innerHTML = table.children[1].innerHTML + tableRows;
-            table.id = 'cart_table';
-            contentContainer.appendChild(table);
-
-            console.log('22');
-        }
-        xhr.send();
-    } else {
-        contentContainer.innerText = 'Keine Einträge vorhanden';
-    }
-}
-
-function prepareCategories(result) {
-    const res = [];
-    let name = '';
-    let tmp = [];
-    result.forEach((elem, index) => {
-        if (elem.ab_parent) {
-            tmp.push(elem.ab_name);
-        } else {
-            if (index > 0) {
-                res.push({
-                    parent: name,
-                    children: tmp
-                });
-            }
-            name = elem.ab_name;
-            tmp = [];
-        }
-    });
-    res.push({
-        parent: name,
-        children: tmp
-    });
-    return res;
-}
-
 function setActive(id) {
     const items = menuElem.children;
     for (let elem of items) {
@@ -270,45 +308,6 @@ function setActive(id) {
         } else {
             elem.classList.remove('active');
         }
-    }
-}
-
-function handleAdd(num) {
-    const items = JSON.parse(localStorage.getItem('cart'));
-    items.push(articlesArray[num]);
-    localStorage.setItem('cart', JSON.stringify(items));
-    contentContainer.innerHTML = '';
-    showCart(items);
-    showArticles(items);
-}
-
-function handleRemove(num) {
-    const items = JSON.parse(localStorage.getItem('cart'));
-    items.pop(items[num]);
-    localStorage.setItem('cart', JSON.stringify(items));
-    contentContainer.innerHTML = '';
-    showCart(items);
-    showArticles(items);
-}
-
-function inCard(id, cart) {
-    for (let elem of cart) {
-        if (elem.id === id) return true;
-    }
-    return false;
-}
-
-function hideSubitems(num) {
-    const length = menuJSON[num].subitems.length;
-    for (let i = 0; i < length; i++) {
-        document.getElementById('subitem' + num + i).classList.add('hidden');
-    }
-}
-
-function showSubitems(num) {
-    const length = menuJSON[num].subitems.length;
-    for (let i = 0; i < length; i++) {
-        document.getElementById('subitem' + num + i).classList.remove('hidden');
     }
 }
 

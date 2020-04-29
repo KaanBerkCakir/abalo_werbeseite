@@ -156,3 +156,22 @@ tr:hover:not(#head) {
 .backYellow {
     background: #ecf0cf;
 }
+
+#shopping-card {
+    padding: 20px;
+    background: #cff0ee;
+}
+
+#shopping-card > span:last-child{
+    margin-right: 32px;
+}
+
+#shopping-card li {
+    margin-bottom: 10px;
+}
+
+.btn {
+    background-color: transparent; /* Blue background */
+    border: none; /* Remove borders */
+    cursor: pointer; /* Mouse pointer on hover */
+}
