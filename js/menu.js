@@ -1,5 +1,6 @@
 const inputSearch = document.getElementById('searchText');
 const contentContainer = document.getElementById('content');
+const hiddenBox = document.getElementById('hiddenBox');
 const menuElem = document.getElementById('menu');
 
 const menu = ['Home', 'Shop', 'Kategorien', 'Unternehmen'];
@@ -10,6 +11,8 @@ var shopIsShown = false;
 var companyIsShown = false;
 
 const color = ['backBlue', 'backGreen', 'backRed', 'backYellow'];
+
+var articlesArray;
 
 var menuClosed = '';
 menu.forEach((elem, index) => {
@@ -39,10 +42,14 @@ menu.forEach((elem, index) => {
 inputSearch.addEventListener("keyup", function (event) {
     if (event.key === "Enter") {
         requestArticles(inputSearch.value);
+        inputSearch.value = '';
     }
 });
 
 function initView() {
+    if (!localStorage.getItem('cart')) {
+        localStorage.setItem('cart', JSON.stringify([]));
+    }
     menuElem.innerHTML = menuClosed;
     showHome();
 }
@@ -103,10 +110,11 @@ function chooseMenu(num) {
 
 function showHome() {
     setActive('item0');
-    contentContainer.innerHTML = 'Herlich Willkommen!';
+    contentContainer.innerHTML = 'Herzlich Willkommen!';
 }
 
 function requestCategories() {
+    setActive('item2');
     const xhr = new XMLHttpRequest();
     xhr.open('GET', 'http://localhost:8000/api/category/all');
     xhr.onload = () => {
@@ -120,7 +128,6 @@ function requestCategories() {
 }
 
 function showCategories(result) {
-    setActive('item2')
     contentContainer.innerHTML = '';
     /*    if(contentContainer.childNodes.length > 1)
         contentContainer.removeChild(contentContainer.childNodes[1]);*/
@@ -150,52 +157,92 @@ function showCategories(result) {
     xhr.send();
 }
 
-function showArticles(result) {
-    setActive('subitem10')
-    if (result.length > 0) {
-        let tableRows = '';
-        result.forEach((elem, index) => {
-            tableRows += '<tr>\n' +
-                '<td>' + elem.id + '</td>\n' +
-                '<td>' + elem.ab_name + '</td>\n' +
-                '<td>' + elem.ab_description + '</td>\n' +
-                '<td>' + elem.ab_createdate + '</td>\n' +
-                '<td>' + elem.ab_price + '</td>\n' +
-                '<td><button onclick="handleAdd(this,' + index + ')"><i class="fas fa-plus"></i></button></td>\n' +
-                '</tr>';
-        });
-
-        const xhr = new XMLHttpRequest();
-        xhr.open('get', 'includes/article_table.html', true);
-        xhr.onload = () => {
-            contentContainer.innerHTML = xhr.responseText;
-            const table = document.getElementById('article_table');
-            table.innerHTML = table.innerHTML + tableRows;
-
-        }
-        xhr.send();
-    } else {
-        contentContainer.innerText = 'Keine Einträge vorhanden';
-    }
-}
-
-function handleAdd(button, num) {
-    button.innerHTML = '<i class="far fa-plus-circle"></i>';
-    console.log(button);
-    console.log(num);
-}
-
 function requestArticles(input) {
+    setActive('subitem10');
+    contentContainer.innerHTML = '';
     const xhr = new XMLHttpRequest();
     xhr.open('GET', 'http://localhost:8000/api/article/find/' + input);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhr.onload = () => {
-        showArticles(JSON.parse(xhr.response));
+        articlesArray = JSON.parse(xhr.response);
+        const cart = JSON.parse(localStorage.getItem('cart'));
+        showCart(cart);
+        showArticles(cart);
     }
     xhr.onerror = function () {
         console.log('fs', xhr.getAllResponseHeaders());
     };
     xhr.send();
+}
+
+function showCart(cart) {
+    if (cart.length > 0) {
+
+        let tableRows = '';
+        cart.forEach((elem, index) => {
+                tableRows += '<tr>\n' +
+                    '<td>' + elem.id + '</td>\n' +
+                    '<td>' + elem.ab_name + '</td>\n' +
+                    '<td>' + elem.ab_description + '</td>\n' +
+                    '<td>' + elem.ab_createdate + '</td>\n' +
+                    '<td>' + elem.ab_price + '</td>\n' +
+                    '<td><button onclick="handleRemove(' + index + ')"><i class="fas fa-minus"></i></button></td>\n' +
+                    '</tr>';
+        });
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', 'includes/article_table.html?id='+ Math.random());
+        xhr.onload = () => {
+            console.log('10');
+            hiddenBox.innerHTML = xhr.response;
+            const table = document.getElementById('article_table');
+            table.children[0].innerText = 'Warenkorb';
+            table.children[1].innerHTML = table.children[1].innerHTML + tableRows;
+            table.id = 'cart_table';
+            contentContainer.appendChild(table);
+            console.log('11');
+        }
+        xhr.send();
+    } else {
+        contentContainer.innerText = 'Der Warenkorb ist leer.';
+    }
+}
+
+function showArticles(cart) {
+    if (articlesArray.length > 0) {
+
+        let tableRows = '';
+        articlesArray.forEach((elem, index) => {
+            if (!inCard(elem.id, cart)) {
+                tableRows += '<tr>\n' +
+                    '<td>' + elem.id + '</td>\n' +
+                    '<td>' + elem.ab_name + '</td>\n' +
+                    '<td>' + elem.ab_description + '</td>\n' +
+                    '<td>' + elem.ab_createdate + '</td>\n' +
+                    '<td>' + elem.ab_price + '</td>\n' +
+                    '<td><button onclick="handleAdd(' + index + ')"><i class="fas fa-plus"></i></button></td>\n' +
+                    '</tr>';
+            }
+        });
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('get', 'includes/article_table.html?id='+ Math.random());
+        xhr.onload = () => {
+            console.log('20');
+            hiddenBox.innerHTML = '';
+            hiddenBox.innerHTML = xhr.response;
+            const table = document.getElementById('article_table');
+            table.children[0].innerText = 'Artikelgit s';
+            table.children[1].innerHTML = table.children[1].innerHTML + tableRows;
+            table.id = 'cart_table';
+            contentContainer.appendChild(table);
+
+            console.log('22');
+        }
+        xhr.send();
+    } else {
+        contentContainer.innerText = 'Keine Einträge vorhanden';
+    }
 }
 
 function prepareCategories(result) {
@@ -232,6 +279,31 @@ function setActive(id) {
             elem.classList.remove('active');
         }
     }
+}
+
+function handleAdd(num) {
+    const items = JSON.parse(localStorage.getItem('cart'));
+    items.push(articlesArray[num]);
+    localStorage.setItem('cart', JSON.stringify(items));
+    contentContainer.innerHTML = '';
+    showCart(items);
+    showArticles(items);
+}
+
+function handleRemove(num) {
+    const items = JSON.parse(localStorage.getItem('cart'));
+    items.pop(items[num]);
+    localStorage.setItem('cart', JSON.stringify(items));
+    contentContainer.innerHTML = '';
+    showCart(items);
+    showArticles(items);
+}
+
+function inCard(id, cart) {
+    for(let elem of cart) {
+        if(elem.id === id) return true;
+    }
+    return false;
 }
 
 initView();

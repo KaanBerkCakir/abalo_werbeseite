@@ -38,6 +38,8 @@
     </div>
 </div>
 
+<div id="hiddenBox" hidden></div>
+
 <script src="../js/menu.js"></script>
 </body>
 </html>
