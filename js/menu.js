@@ -25,7 +25,6 @@ const menuJSON = [
 
 var shopIsShown = false;
 var companyIsShown = false;
-var signedIn = false;
 
 const color = ['backBlue', 'backGreen', 'backRed', 'backYellow'];
 
@@ -49,22 +48,12 @@ inputSearch.addEventListener("keyup", function (event) {
 });
 
 function initView() {
+    updateUserButton();
+
     if (!localStorage.getItem('cart')) {
         localStorage.setItem('cart', JSON.stringify([]));
     }
     menuElem.innerHTML = menuHTML;
-
-    /*const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:8000/authentification/login');
-    xhr.onload = () => {
-        console.log(xhr.response);
-    }
-    xhr.onerror = function () {
-        console.log('fs', xhr.getAllResponseHeaders());
-    };
-    xhr.send();*/
-
-    updateUserButton();
 
     showHome();
 }
@@ -136,6 +125,7 @@ function requestArticles(input) {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', 'http://localhost:8000/api/article/find/' + input);
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
     xhr.onload = () => {
         articlesArray = JSON.parse(xhr.response);
         const cart = JSON.parse(localStorage.getItem('cart'));
@@ -226,7 +216,7 @@ function showArticles(cart) {
 }
 
 function handleAdd(num) {
-    if(signedIn) {
+    if(localStorage.getItem('user')) {
         const items = JSON.parse(localStorage.getItem('cart'));
         items.push(articlesArray[num]);
         localStorage.setItem('cart', JSON.stringify(items));
@@ -258,6 +248,7 @@ function createNewArticle() {
 }
 
 function requestCategories() {
+    contentContainer.innerHTML = '';
     setActive('item2');
     const xhr = new XMLHttpRequest();
     xhr.open('GET', 'http://localhost:8000/api/category/all');
@@ -297,16 +288,15 @@ function prepareCategories(result) {
 }
 
 function showCategories(result) {
-    contentContainer.innerHTML = '';
     /*    if(contentContainer.childNodes.length > 1)
         contentContainer.removeChild(contentContainer.childNodes[1]);*/
     const xhr = new XMLHttpRequest();
     xhr.open('get', 'includes/category_card.html?id=' + Math.random(), true);
     xhr.onload = () => {
+        hiddenBox.innerHTML = xhr.responseText;
         const container = document.createElement('div');
-        container.classList = ['row al-s-stretch jc-around'];
-        container.innerHTML = xhr.responseText;
-        contentContainer.appendChild(container);
+        container.classList = ['row al-s-stretch'];
+
         const head = document.getElementsByClassName('cat-card-header')[0];
         const content = document.getElementsByClassName('cat-card-content')[0];
         result.forEach((elem, index) => {
@@ -315,13 +305,13 @@ function showCategories(result) {
             elem.children.forEach(child => {
                 tmp += '<span>' + child + '</span>'
             });
+
             content.innerHTML = tmp;
             let t1 = document.getElementsByClassName('cat-card')[0].cloneNode(true);
             t1.classList.add(color[index % 4]);
             container.appendChild(t1);
         });
-        console.log(container);
-        container.removeChild(document.getElementsByClassName('cat-card')[0]);
+        contentContainer.appendChild(container);
     }
     xhr.send();
 }
@@ -337,8 +327,8 @@ function setActive(id) {
     }
 }
 
-function updateUserButton(status) {
-    signedIn = status;
+function updateUserButton() {
+    const signedIn = localStorage.getItem('user');
     if(signedIn) {
         userButton.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
     }else{
@@ -347,8 +337,41 @@ function updateUserButton(status) {
 }
 
 function userInteraction() {
-    localStorage.setItem('cart', JSON.stringify([]));
-    updateUserButton(!signedIn);
+    const signedIn = localStorage.getItem('user');
+    if(signedIn) {
+        logout();
+    }else {
+        login();
+    }
+}
+
+function login() {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://localhost:8000/authentification/login');
+    xhr.withCredentials = true;
+    xhr.onload = () => {
+        localStorage.setItem('user', JSON.parse(xhr.response).user);
+        updateUserButton();
+    }
+    xhr.onerror = function () {
+        console.log('ffs', xhr.getAllResponseHeaders());
+    };
+    xhr.send();
+}
+
+function logout() {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://localhost:8000/authentification/logout');
+    xhr.withCredentials = true;
+    xhr.onload = () => {
+        localStorage.removeItem('user');
+        localStorage.setItem('cart', JSON.stringify([]));
+        updateUserButton();
+    }
+    xhr.onerror = function () {
+        console.log('ffs', xhr.getAllResponseHeaders());
+    };
+    xhr.send();
 }
 
 initView();
