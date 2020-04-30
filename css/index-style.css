@@ -175,3 +175,10 @@ tr:hover:not(#head) {
     border: none; /* Remove borders */
     cursor: pointer; /* Mouse pointer on hover */
 }
+
+#user-button {
+    margin-right: 20px;
+    background-color: transparent; /* Blue background */
+    border: none; /* Remove borders */
+    cursor: pointer; /* Mouse pointer on hover */
+}

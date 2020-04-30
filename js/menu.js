@@ -1,4 +1,5 @@
 const inputSearch = document.getElementById('searchText');
+const userButton = document.getElementById('user-button');
 const contentContainer = document.getElementById('content');
 const hiddenBox = document.getElementById('hiddenBox');
 const menuElem = document.getElementById('menu');
@@ -24,6 +25,7 @@ const menuJSON = [
 
 var shopIsShown = false;
 var companyIsShown = false;
+var signedIn = false;
 
 const color = ['backBlue', 'backGreen', 'backRed', 'backYellow'];
 
@@ -47,11 +49,23 @@ inputSearch.addEventListener("keyup", function (event) {
 });
 
 function initView() {
-    // localStorage.removeItem('cart');
     if (!localStorage.getItem('cart')) {
         localStorage.setItem('cart', JSON.stringify([]));
     }
     menuElem.innerHTML = menuHTML;
+
+    /*const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://localhost:8000/authentification/login');
+    xhr.onload = () => {
+        console.log(xhr.response);
+    }
+    xhr.onerror = function () {
+        console.log('fs', xhr.getAllResponseHeaders());
+    };
+    xhr.send();*/
+
+    updateUserButton();
+
     showHome();
 }
 
@@ -212,12 +226,16 @@ function showArticles(cart) {
 }
 
 function handleAdd(num) {
-    const items = JSON.parse(localStorage.getItem('cart'));
-    items.push(articlesArray[num]);
-    localStorage.setItem('cart', JSON.stringify(items));
-    contentContainer.innerHTML = '';
-    showCart(items);
-    showArticles(items);
+    if(signedIn) {
+        const items = JSON.parse(localStorage.getItem('cart'));
+        items.push(articlesArray[num]);
+        localStorage.setItem('cart', JSON.stringify(items));
+        contentContainer.innerHTML = '';
+        showCart(items);
+        showArticles(items);
+    }else {
+        alert('Sie müssen sich zuerst anmelden');
+    }
 }
 
 function cartContains(id, cart) {
@@ -228,7 +246,15 @@ function cartContains(id, cart) {
 }
 
 function createNewArticle() {
-    alert('Artikel konnte nicht Hinzugefügt werden');
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://localhost:8000/api/article/create');
+    xhr.onload = () => {
+        alert(xhr.responseText);
+    }
+    xhr.onerror = function () {
+        console.log('fs', xhr.getAllResponseHeaders());
+    };
+    xhr.send();
 }
 
 function requestCategories() {
@@ -309,6 +335,20 @@ function setActive(id) {
             elem.classList.remove('active');
         }
     }
+}
+
+function updateUserButton(status) {
+    signedIn = status;
+    if(signedIn) {
+        userButton.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
+    }else{
+        userButton.innerHTML = '<i class="fas fa-sign-in-alt"></i>';
+    }
+}
+
+function userInteraction() {
+    localStorage.setItem('cart', JSON.stringify([]));
+    updateUserButton(!signedIn);
 }
 
 initView();

@@ -18,6 +18,7 @@
             <span>Macht Altes Flüssig.</span>
         </div>
         <input id="searchText" type="text" placeholder="Search.." name="search">
+        <button id="user-button" onclick="userInteraction()"></button>
     </div>
     <div class="grow-1 row">
         <div id="sidenav" class="card column jc-between">
