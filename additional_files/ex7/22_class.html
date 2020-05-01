@@ -6,7 +6,48 @@
 </head>
 <body>
 <script>
+    class User {
+        constructor(firstname, lastname) {
+            this.firstname = firstname;
+            this.lastname = lastname;
+        }
 
+        getFirstname = () => {
+            return this.firstname;
+        };
+
+        getLastname = () => {
+            return this.lastname;
+        };
+
+        setFirstname = firstname => {
+            this.firstname = firstname;
+        };
+
+        setLastname = lastname => {
+            this.lastname = lastname
+        };
+    }
+
+    class Buyer extends User {
+        constructor(firstname, lastname) {
+            super(firstname, lastname);
+            this.lastBuy = '';
+        };
+
+        getLastBuy = () => {
+            return this.lastBuy;
+        };
+
+        buy = lastBuy => {
+            this.lastBuy = lastBuy;
+        };
+
+    }
+
+    const buyer = new Buyer('Jonas', 'Schell');
+    buyer.buy('Kartoffel');
+    console.log(buyer.getFirstname() + ' ' + buyer.getLastname() + ' hat den Artikel "' + buyer.getLastBuy() + '" zuletzt gekauft.');
 </script>
 </body>
 </html>
