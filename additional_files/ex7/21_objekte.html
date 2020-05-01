@@ -6,6 +6,90 @@
 </head>
 <body>
 <script>
+    const CarJSON = {
+        name: '',
+        type: '',
+        getName: () => {
+            return this.name;
+        },
+        getType: () => {
+            return this.type;
+        },
+        setName: name => {
+            this.name = name;
+        },
+        setType: type => {
+            this.type = type
+        },
+        writeToConsole: () => {
+            console.log('JSONObject');
+            console.log('name=' + this.name + ',type=' + this.type);
+        }
+    }
+
+    function CarFunction() {
+        this.name = '';
+        this.type = '';
+        this.getName = () => {
+            return this.name;
+        };
+        this.getType = () => {
+            return this.type;
+        };
+        this.setName = name => {
+            this.name = name;
+        };
+        this.setType = type => {
+            this.type = type
+        };
+        this.writeToConsole = () => {
+            console.log('FunctionObject');
+            console.log('name=' + this.name + ',type=' + this.type);
+        };
+    }
+
+    class CarClass {
+        constructor() {
+            this.name = '';
+            this.type = '';
+        }
+
+        getName = () => {
+            return this.name;
+        };
+
+        getType = () => {
+            return this.type;
+        };
+
+        setName = name => {
+            this.name = name;
+        };
+
+        setType = type => {
+            this.type = type
+        };
+
+        writeToConsole = () => {
+            console.log('ClassObject');
+            console.log('name=' + this.name + ',type=' + this.type);
+        };
+    }
+
+    const car1 = Object.create(CarJSON);
+    car1.setName('golf');
+    car1.setType('kleinwagen');
+    car1.writeToConsole();
+
+    const car2 = new CarFunction();
+    car2.setName('focus');
+    car2.setType('kombi');
+    car2.writeToConsole();
+
+    const car3 = new CarClass();
+    car3.setName('vito');
+    car3.setType('transporter');
+    car3.writeToConsole();
 
 </script>
 </body>
