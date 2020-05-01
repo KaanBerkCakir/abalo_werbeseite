@@ -3,10 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <title>Aufgabe 7 - 23</title>
+
+    <style>
+        body,html {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            background: red;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        span {
+            margin-top: 200px;
+            font-size: 25px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-<script>
+<span> Ändere den Hintergrund:</span>
+<button onclick="changeColor(this)">Grün</button>
 
+<script>
+    let red = 1;
+
+    function changeColor(btn) {
+        if(red) {
+            document.body.style.background = 'green';
+            btn.innerText = 'Rot';
+            red = 0;
+        }else {
+            document.body.style.background = 'red';
+            btn.innerText = 'Grün';
+            red = 1;
+        }
+    }
 </script>
 </body>
 </html>
