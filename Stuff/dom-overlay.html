@@ -1,10 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<style>
+    div.absolute {
+        border: 3px solid #73AD21;
+        position: absolute;
+        bottom: 0;
+        height: auto;
+        widtgh: auto;
+    }
+</style>
 <body>
 
+<div class="absolute">Ich bin ein kleines Kästchen am Boden</div>
+<script>
+    ("#the_id_of_the_banner").trigger('click')
+</script>
 </body>
 </html>

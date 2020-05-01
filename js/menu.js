@@ -239,7 +239,7 @@ function createNewArticle() {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://localhost:8000/api/article/create');
     xhr.onload = () => {
-        alert(xhr.responseText);
+        alert(JSON.parse(xhr.response).message);
     }
     xhr.onerror = function () {
         console.log('fs', xhr.getAllResponseHeaders());
