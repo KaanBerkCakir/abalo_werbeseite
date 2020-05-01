@@ -184,12 +184,12 @@ tr:hover:not(#head) {
 }
 
 #cookieConsent {
-    border: 3px solid #7FFFD4;
-    background-color: #7FFFD4;
+    border-top: 3px solid #393d3f;
+    font-size: 19px;
+    background-color: #08b1a9;
     position: absolute;
     bottom: 0;
-    height: auto;
-    text-align: center;
-    horiz-align: center;
-    vertical-align: bottom;
+    left: 0;
+    right: 0;
+    height: 10%;
 }

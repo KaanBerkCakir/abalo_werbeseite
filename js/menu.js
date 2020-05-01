@@ -28,11 +28,13 @@ var companyIsShown = false;
 var articlesArray;
 var menuHTML = '';
 
+var signedIn = false;
+
 menuJSON.forEach((item, itemIndex) => {
     menuHTML += '<span id="item' + itemIndex + '" class="item link" onclick="chooseMenu(' + itemIndex + ')">' + item.item + '</span>';
     if (item.subitems.length > 0) {
         item.subitems.forEach((subitem, subitemIndex) => {
-            menuHTML += '<span id="subitem' + itemIndex + subitemIndex + '" class="subitem link hidden ' + color[itemIndex%4] + '" onclick="chooseMenu(' + itemIndex + subitemIndex + ')">' + subitem + '</span>';
+            menuHTML += '<span id="subitem' + itemIndex + subitemIndex + '" class="subitem link hidden ' + color[itemIndex % 4] + '" onclick="chooseMenu(' + itemIndex + subitemIndex + ')">' + subitem + '</span>';
         });
     }
 });
@@ -45,19 +47,24 @@ inputSearch.addEventListener("keyup", function (event) {
 });
 
 function initView() {
-    startCookieConsent();
+    // localStorage.removeItem('cookieconsent');
+    if (!isConsentGiven()) {
+        localStorage.removeItem('user');
+        localStorage.removeItem('cart');
+    } else {
+        signedIn = localStorage.getItem('user') === null ? false : localStorage.getItem('user');
+    }
     updateUserButton();
 
     if (!localStorage.getItem('cart')) {
         localStorage.setItem('cart', JSON.stringify([]));
     }
-    menuElem.innerHTML = menuHTML;
 
+    menuElem.innerHTML = menuHTML;
     showHome();
 }
 
 function chooseMenu(num) {
-    const menuElem = document.getElementById('menu');
     switch (num) {
         case 0:
             showHome();
@@ -214,14 +221,14 @@ function showArticles(cart) {
 }
 
 function handleAdd(num) {
-    if(localStorage.getItem('user')) {
+    if (signedIn) {
         const items = JSON.parse(localStorage.getItem('cart'));
         items.push(articlesArray[num]);
         localStorage.setItem('cart', JSON.stringify(items));
         contentContainer.innerHTML = '';
         showCart(items);
         showArticles(items);
-    }else {
+    } else {
         alert('Sie müssen sich zuerst anmelden');
     }
 }
@@ -326,19 +333,17 @@ function setActive(id) {
 }
 
 function updateUserButton() {
-    const signedIn = localStorage.getItem('user');
-    if(signedIn) {
+    if (signedIn) {
         userButton.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
-    }else{
+    } else {
         userButton.innerHTML = '<i class="fas fa-sign-in-alt"></i>';
     }
 }
 
 function userInteraction() {
-    const signedIn = localStorage.getItem('user');
-    if(signedIn) {
+    if (signedIn) {
         logout();
-    }else {
+    } else {
         login();
     }
 }
@@ -348,7 +353,10 @@ function login() {
     xhr.open('GET', 'http://localhost:8000/authentification/login');
     xhr.withCredentials = true;
     xhr.onload = () => {
-        localStorage.setItem('user', JSON.parse(xhr.response).user);
+        if (isConsentGiven()) {
+            localStorage.setItem('user', JSON.parse(xhr.response).user);
+        }
+        signedIn = true;
         updateUserButton();
     }
     xhr.onerror = function () {
@@ -362,6 +370,7 @@ function logout() {
     xhr.open('GET', 'http://localhost:8000/authentification/logout');
     xhr.withCredentials = true;
     xhr.onload = () => {
+        signedIn = false;
         localStorage.removeItem('user');
         localStorage.setItem('cart', JSON.stringify([]));
         updateUserButton();
