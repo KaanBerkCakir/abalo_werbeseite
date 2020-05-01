@@ -1,0 +1,66 @@
+----------------------------------------------------- ex. 3 -----------------------------------------------------
+
+Hilfreiche Features in PHPStorms:
+
+1. Strg + W
+   Erleichert das Auswählen von Codefragmenten enorm. Dabei wird beim ersten Mal
+   das Wort markiert, wo sich der Cursor gerade befindet. Danach der gesamte Ausdruck usw.
+
+2. Einbindung von VSC
+   Man kann mittels der IDE git-repos anlegen/clonen und auch aus der Oberfläche heraus
+   commits starten und diese pushen.
+   Weiter werden geänderte Zeilen markiert und bei einem Hover wird auch die aktuelle
+   Änderung angezeigt.
+
+3. Konsole
+   Die IDE verfügt über eine Konsole, mit der man - ohne ein weiteres Fenster zu öffnen -
+   bequem Pakete laden, git Befehle übergeben und vieles mehr machen kann.
+
+----------------------------------------------------- ex. 4 -----------------------------------------------------
+
+Verbreitung von Webbrowsern auf Desktopgeraeten laut NetMarketShare Nov 2019:
+1. Chrome: 67%
+2. Firefox: 8%
+3. IE: 7%
+4. Edge: 6%
+5. Safari: 5%
+
+Verbreitung von Webbrowsern auf Mobilgeraeten laut NetMarketShare Nov 2019:
+1. Chrome: 62%
+2. Safari: 28%
+3. Samsung Internet: 4%
+4. Opera: 0,92%
+5. Firefox: 0,52%
+
+Wir haben hierbei chinesische Webbrowser nicht beruecksichtigt, weil wir nicht die Integritaet von berichteten Zahlen
+bestaetigen koennen.
+
+Unterstuetzung von Javascript(ES6)  auf diversen Webbrowsern:
+Chrome: 51
+Firefox: 54
+Edge: 14
+Safari: 10
+Opera: 38
+
+Unterstuetzung von Javascript(ES7)  auf diversen Webbrowsern:
+
+Chrome: 68
+Opera: 55
+
+Welche Browser wollen wir unterstuetzen mit unserem Abalo-Projekt?
+1. Chrome: Erfolgreichster Webbrowser und erschliesst grossen User-Market
+2. Firefox: Persoenlicher Favorit, weil er die hoechste ES& Unterstuetzung hat, und bisschen mehr Fokus legt auf Privatssphaere
+3. Safari: Wir wollen auch den Markt der IOS-User erreichen, und dafuer ist Safarisupport unerlaesslich.
+
+----------------------------------------------------- ex. 6 -----------------------------------------------------
+
+Unterschiede zwischen JavaScript, PHP und C++
+1.	Javascript wird von einem Interpreter eingelesen, C++ wird von einem Compiler compiliert.
+2.	Javascript muss bei der Deklaration einer Variabel kein Datentyp angegeben werden, bei C++ schon.
+3.	Javascript kennt fuer numerische Operationen nur den Datentyp Number, C++ kennt dagegen Interger,Float und Double.
+4.	Javascript kann HTML manipulieren, C++ nicht.
+5.	Javascript hat keinen festen Typ in einem Array, C++ schon.
+6.	Javascript gibt Speicher frei mit einem Garbage-Collector, C++ muss Speicher freigeben manuell mit einem delete.
+7.	Javascript hat keinen Destructor, C++ hat einen Destructor(bedingt durch 8)
+8.	Javascript ist langsamer als C++ in der Ausfuehrung.
+
