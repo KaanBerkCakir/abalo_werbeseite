@@ -8,6 +8,6 @@ Autoren:
 
 Repositories:
 - abalo: https://github.com/sanoj3008/abalo.git
-    - Abgabecommit
+    - Abgabecommit 14ecb4f8edfc80fcfdd83b264aa289e517aab850
 - abalo_werbeseite: https://github.com/sanoj3008/abalo_werbeseite.git
-    - Abgabecommit
+    - Abgabecommit abf3400ca750187b851fbc91ca13b4c0b8cb47cc
