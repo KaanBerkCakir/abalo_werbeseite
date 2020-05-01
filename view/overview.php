@@ -5,6 +5,7 @@
     <title>Abalo</title>
 
     <script src="https://kit.fontawesome.com/c1d25b9942.js"></script>
+    <script src="http://localhost:8000/cookie"></script>
     <link rel="stylesheet" href="../css/index-style.css">
     <link rel="stylesheet" href="../css/flex-style.css">
     <link rel="stylesheet" href="../css/category-card.css">

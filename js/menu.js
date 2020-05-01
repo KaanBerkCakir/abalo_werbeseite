@@ -3,7 +3,6 @@ const userButton = document.getElementById('user-button');
 const contentContainer = document.getElementById('content');
 const hiddenBox = document.getElementById('hiddenBox');
 const menuElem = document.getElementById('menu');
-
 const menuJSON = [
     {
         item: 'Home',
@@ -22,15 +21,13 @@ const menuJSON = [
         subitems: ['Philosophie', 'Karriere']
     },
 ];
+const color = ['backBlue', 'backGreen', 'backRed', 'backYellow'];
 
 var shopIsShown = false;
 var companyIsShown = false;
-
-const color = ['backBlue', 'backGreen', 'backRed', 'backYellow'];
-
 var articlesArray;
-
 var menuHTML = '';
+
 menuJSON.forEach((item, itemIndex) => {
     menuHTML += '<span id="item' + itemIndex + '" class="item link" onclick="chooseMenu(' + itemIndex + ')">' + item.item + '</span>';
     if (item.subitems.length > 0) {
@@ -48,6 +45,7 @@ inputSearch.addEventListener("keyup", function (event) {
 });
 
 function initView() {
+    startCookieConsent();
     updateUserButton();
 
     if (!localStorage.getItem('cart')) {
