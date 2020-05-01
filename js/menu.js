@@ -236,7 +236,18 @@ function cartContains(id, cart) {
 }
 
 function createNewArticle() {
-    const xhr = new XMLHttpRequest();
+
+    contentContainer.innerHTML = '<form action="http://localhost:8000/api/article/create" method="post">\n' +
+        '        <label for="aName">Artikel Name:</label><br>\n' +
+        '         <input type="text" id="aName" name="name" required><br>\n' +
+        '        <label for="aPreis">Preis in Euro:</label><br>\n' +
+        '        <input type="number" id="aPreis" name="price"  min=1><br>\n' +
+        '        <label for="aBeschreibung">Artikel Beschreibung:</label><br>\n' +
+        '        <textarea name="desc" rows="10" cols="30"></textarea><br>\n' +
+        '        <input type="submit" value="Submit">\' +
+        '        <input type="hidden" name="creator" value="visitor"> ' +
+        '        </form> ';
+   /* const xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://localhost:8000/api/article/create');
     xhr.onload = () => {
         alert(JSON.parse(xhr.response).message);
@@ -244,7 +255,8 @@ function createNewArticle() {
     xhr.onerror = function () {
         console.log('fs', xhr.getAllResponseHeaders());
     };
-    xhr.send();
+    xhr.send();*/
+   // contentContainer.appendChild(form);
 }
 
 function requestCategories() {
