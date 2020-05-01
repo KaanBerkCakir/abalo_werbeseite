@@ -5,6 +5,23 @@
     <title>Title</title>
 </head>
 <body>
+<script>
 
+//console.log("t" + parseInt(document.cookie.slice(8, 11)));
+    if(parseInt(document.cookie.slice(8, 11)) >= 0) {
+        let x = document.cookie;
+
+       // console.log("debug");
+        //console.log(document.cookie.slice(8, 11));
+        let y = parseInt(document.cookie.slice(8, 11)) + 1;
+        document.cookie = "counter=" + y;
+    }
+    else {
+        document.cookie = "counter=0";
+    }
+
+//console.log(parseInt(document.cookie.slice(8, 11)));
+console.log(document.cookie);
+</script>
 </body>
 </html>

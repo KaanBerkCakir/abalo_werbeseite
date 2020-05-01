@@ -5,13 +5,43 @@
     <title>Title</title>
 </head>
 <body>
-<button onclick="erstelleForm">Erstelle Form</button>
+<button onclick="erstelleForm()">Erstelle Form</button>
 
 <script>
-var para = document.createElement("p");
-var node = document.createTextNode("This is new.");
-para.appendChild(node);
-var element = document.getElementById("div1");
-element.appendChild(para);
+    'use strict';
+    function erstelleForm() {
+    var erstellteForm = document.createElement("form");
+    erstellteForm.setAttribute('method',"post");
+
+    var text = document.createElement("input"); //input element, text
+    text.setAttribute('type',"text");
+    text.setAttribute('name',"username");
+
+
+
+    erstellteForm.appendChild(text);
+
+
+    var values = ["1", "2", "3", "4"];
+
+        var dropDown = document.createElement("select");
+        dropDown.name = "pets";
+        dropDown.id = "pets";
+
+        for (let i = 0;i < 4;i++) {
+            var option = document.createElement("option");
+            option.value = values[i];
+            option.text = values[i];
+            dropDown.appendChild(option);
+        }
+        erstellteForm.appendChild(dropDown);
+
+    //and some more input elements here
+    //and dont forget to add a submit button
+
+    document.getElementsByTagName('body')[0].appendChild(erstellteForm);
+    }
+</script>
+
 </body>
 </html>
