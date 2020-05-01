@@ -1,0 +1,33 @@
+Verbreitung von Webbrowsern auf Desktopgeräten laut NetMarketShare Nov 2019:
+1. Chrome: 67%
+2. Firefox: 8%
+3. IE: 7%
+4. Edge: 6%
+5. Safari: 5%
+
+Verbreitung von Webbrowsern auf Mobilgeräten laut NetMarketShare Nov 2019:
+1. Chrome: 62%
+2. Safari: 28%
+3. Samsung Internet: 4%
+4. Opera: 0,92%
+5. Firefox: 0,52%
+
+Wir haben hierbei chinesische Webbrowser nicht berücksichtigt, weil wir nicht die Integrität von berichteten Zahlen 
+bestätigen können.
+
+Unterstützung von Javascript(ES6)  auf diversen Webbrowsern:
+Chrome: 51
+Firefox: 54
+Edge: 14
+Safari: 10
+Opera: 38
+
+Unterstützung von Javascript(ES7)  auf diversen Webbrowsern:
+
+Chrome: 68
+Opera: 55
+
+Welche Browser wollen wir unterstützen mit unserem Abalo-Projekt?
+1. Chrome: Erfolgreichster Webbrowser und erschließt großen User-Market
+2. Firefox: Persönlicher Favorit, weil er die höchste ES& Unterstützung hat, und bisschen mehr Fokus legt auf Privatssphäre
+3. Safari: Wir wollen auch den Markt der IOS-User erreichen, und dafür ist Safarisupport unerlässlich.
