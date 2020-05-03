@@ -30,7 +30,7 @@
                 <span>Kaan Berk Cakir</span>
                 <div class="row jc-between">
                     <span>Jonas Schell</span>
-                    <span>&copy; Copyright</span>
+                    <span><span onclick="removeConsent()">&copy;</span> Copyright</span>
                 </div>
             </div>
         </div>

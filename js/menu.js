@@ -257,10 +257,7 @@ function createNewArticle() {
             '</form>';
 
         const hiddenInput = document.getElementById('hidden-input');
-        if (isConsentGiven()) {
-            console.log(localStorage.getItem('user'));
-            hiddenInput.value = localStorage.getItem('user');
-        }
+        hiddenInput.value = signedIn;
     }else {
         alert('Bitte melde dich an, um fortfahren zu können');
     }
@@ -269,6 +266,7 @@ function createNewArticle() {
 function submitForm(form) {
     var xhr = new XMLHttpRequest();
     xhr.onload = () => {
+        form.reset();
         alert(JSON.parse(xhr.response).message);
     }
     xhr.open(form.method, form.getAttribute("action"));
