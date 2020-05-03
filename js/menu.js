@@ -241,16 +241,18 @@ function cartContains(id, cart) {
 }
 
 function createNewArticle() {
-    contentContainer.innerHTML = '<form action="http://localhost:8000/api/article/create" method="post">' +
-        '        <label for="aName">Artikel Name:</label><br>' +
-        '         <input type="text" id="aName" name="name" required><br>' +
-        '        <label for="aPreis">Preis in Euro:</label><br>' +
-        '        <input type="number" id="aPreis" name="price"  min=1><br>' +
-        '        <label for="aBeschreibung">Artikel Beschreibung:</label><br>' +
-        '        <textarea name="desc" rows="10" cols="30"></textarea><br>' +
-        '        <input type="submit" value="Submit">' +
-        '        <input id="hidden-input" type="hidden" name="creator" value=""> ' +
-        '        </form> ';
+    contentContainer.innerHTML = '<form method="POST"' +
+        'action="http://localhost:8000/api/article/create"' +
+        'onsubmit="return submitForm(this);" >' +
+        '<label for="aName">Artikel Name:</label><br>' +
+        '<input type="text" id="aName" name="name" required><br>' +
+        '<label for="aPreis">Preis in Euro:</label><br>' +
+        '<input type="number" id="aPreis" name="price" min=1><br>' +
+        '<label for="aBeschreibung">Artikel Beschreibung:</label><br>' +
+        '<textarea name="desc" rows="10" cols="30"></textarea><br>' +
+        '<input id="hidden-input" type="hidden" name="creator" value="">' +
+        '<input type="submit" value="Submit"/>\n' +
+        '</form>';
 
     const hiddenInput = document.getElementById('hidden-input');
     if(isConsentGiven()) {
@@ -268,6 +270,17 @@ function createNewArticle() {
     };
     xhr.send();*/
    // contentContainer.appendChild(form);
+}
+
+function submitForm(oFormElement) {
+    console.log(new FormData(oFormElement));
+    var xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+        alert(JSON.parse(xhr.response).message);
+    }
+    xhr.open(oFormElement.method, oFormElement.getAttribute("action"));
+    xhr.send(new FormData(oFormElement));
+    return false;
 }
 
 function requestCategories() {
