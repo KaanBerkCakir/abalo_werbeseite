@@ -28,7 +28,7 @@ var companyIsShown = false;
 var articlesArray;
 var menuHTML = '';
 
-var signedIn = false;
+var signedIn;
 
 menuJSON.forEach((item, itemIndex) => {
     menuHTML += '<span id="item' + itemIndex + '" class="item link" onclick="chooseMenu(' + itemIndex + ')">' + item.item + '</span>';
@@ -49,10 +49,11 @@ inputSearch.addEventListener("keyup", function (event) {
 function initView() {
     // localStorage.removeItem('cookieconsent');
     if (!isConsentGiven()) {
+        signedIn = null;
         localStorage.removeItem('user');
         localStorage.removeItem('cart');
     } else {
-        signedIn = localStorage.getItem('user') === null ? false : localStorage.getItem('user');
+        signedIn = localStorage.getItem('user') === null ? null : localStorage.getItem('user');
     }
     updateUserButton();
 
@@ -241,45 +242,37 @@ function cartContains(id, cart) {
 }
 
 function createNewArticle() {
-    contentContainer.innerHTML = '<form method="POST"' +
-        'action="http://localhost:8000/api/article/create"' +
-        'onsubmit="return submitForm(this);" >' +
-        '<label for="aName">Artikel Name:</label><br>' +
-        '<input type="text" id="aName" name="name" required><br>' +
-        '<label for="aPreis">Preis in Euro:</label><br>' +
-        '<input type="number" id="aPreis" name="price" min=1><br>' +
-        '<label for="aBeschreibung">Artikel Beschreibung:</label><br>' +
-        '<textarea name="desc" rows="10" cols="30"></textarea><br>' +
-        '<input id="hidden-input" type="hidden" name="creator" value="">' +
-        '<input type="submit" value="Submit"/>\n' +
-        '</form>';
+    if(signedIn) {
+        contentContainer.innerHTML = '<form method="POST"' +
+            'action="http://localhost:8000/api/article/create"' +
+            'onsubmit="return submitForm(this);" >' +
+            '<label for="aName">Artikel Name:</label><br>' +
+            '<input type="text" id="aName" name="name" required><br>' +
+            '<label for="aPreis">Preis in Euro:</label><br>' +
+            '<input type="number" id="aPreis" name="price" min=1><br>' +
+            '<label for="aBeschreibung">Artikel Beschreibung:</label><br>' +
+            '<textarea name="desc" rows="10" cols="30"></textarea><br>' +
+            '<input id="hidden-input" type="hidden" name="creator" value="">' +
+            '<input type="submit" value="Submit"/>\n' +
+            '</form>';
 
-    const hiddenInput = document.getElementById('hidden-input');
-    if(isConsentGiven()) {
-        console.log(localStorage.getItem('user'));
-        hiddenInput.value = localStorage.getItem('user');
+        const hiddenInput = document.getElementById('hidden-input');
+        if (isConsentGiven()) {
+            console.log(localStorage.getItem('user'));
+            hiddenInput.value = localStorage.getItem('user');
+        }
+    }else {
+        alert('Bitte melde dich an, um fortfahren zu können');
     }
-
-   /* const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:8000/api/article/create');
-    xhr.onload = () => {
-        alert(JSON.parse(xhr.response).message);
-    }
-    xhr.onerror = function () {
-        console.log('fs', xhr.getAllResponseHeaders());
-    };
-    xhr.send();*/
-   // contentContainer.appendChild(form);
 }
 
-function submitForm(oFormElement) {
-    console.log(new FormData(oFormElement));
+function submitForm(form) {
     var xhr = new XMLHttpRequest();
     xhr.onload = () => {
         alert(JSON.parse(xhr.response).message);
     }
-    xhr.open(oFormElement.method, oFormElement.getAttribute("action"));
-    xhr.send(new FormData(oFormElement));
+    xhr.open(form.method, form.getAttribute("action"));
+    xhr.send(new FormData(form));
     return false;
 }
 
@@ -384,10 +377,10 @@ function login() {
     xhr.open('GET', 'http://localhost:8000/authentification/login');
     xhr.withCredentials = true;
     xhr.onload = () => {
+        signedIn = JSON.parse(xhr.response).user;
         if (isConsentGiven()) {
-            localStorage.setItem('user', JSON.parse(xhr.response).user);
+            localStorage.setItem('user', signedIn);
         }
-        signedIn = true;
         updateUserButton();
     }
     xhr.onerror = function () {
@@ -401,10 +394,11 @@ function logout() {
     xhr.open('GET', 'http://localhost:8000/authentification/logout');
     xhr.withCredentials = true;
     xhr.onload = () => {
-        signedIn = false;
+        signedIn = null;
         localStorage.removeItem('user');
         localStorage.setItem('cart', JSON.stringify([]));
         updateUserButton();
+        showHome();
     }
     xhr.onerror = function () {
         console.log('ffs', xhr.getAllResponseHeaders());
