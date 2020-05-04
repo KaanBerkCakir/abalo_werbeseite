@@ -243,6 +243,7 @@ function cartContains(id, cart) {
 
 function createNewArticle() {
     if(signedIn) {
+        setActive('subitem11');
         contentContainer.innerHTML = '<form method="POST"' +
             'action="http://localhost:8000/api/article/create"' +
             'onsubmit="return submitForm(this);" >' +

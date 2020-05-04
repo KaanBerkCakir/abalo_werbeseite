@@ -182,14 +182,3 @@ tr:hover:not(#head) {
     border: none; /* Remove borders */
     cursor: pointer; /* Mouse pointer on hover */
 }
-
-#cookieConsent {
-    border-top: 3px solid #393d3f;
-    font-size: 19px;
-    background-color: #08b1a9;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 10%;
-}
