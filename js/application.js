@@ -57,13 +57,13 @@ function initView() {
     updateUserButton();
 
     menuElem.innerHTML = menuHTML;
-    loadHome();
+    loadHomeView();
 }
 
 function chooseMenu(num) {
     switch (num) {
         case 0:
-            loadHome();
+            loadHomeView();
             break;
         case 1:
             if (shopIsShown) {
@@ -75,13 +75,13 @@ function chooseMenu(num) {
             }
             break;
         case 10:
-            loadArticleList();
+            loadArticleListView();
             break;
         case 11:
-            loadCreateForm();
+            loadCreateArticleView();
             break;
         case 2:
-            loadCategories();
+            loadCategoriesView();
             break;
         case 3:
             if (companyIsShown) {
@@ -115,14 +115,33 @@ function showSubitems(num) {
     }
 }
 
-function loadHome() {
+function loadHomeView() {
     setActive('item0');
-    loadFile('./vue/start/start.html');
+    loadFile('../vue/start.html');
+}
+
+function loadCategoriesView() {
+    setActive('item2');
+    loadFile('../vue/categories.vue');
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'http://localhost:8000/api/categories');
+    xhr.onload = () => {
+        var vm = new Vue({
+            el: '#content',
+            data: {
+                categories: JSON.parse(xhr.response),
+                colors: color
+            }
+        });
+    }
+    xhr.onerror = function () {
+    };
+    xhr.send();
 }
 
 function loadFile(url) {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', url);
+    xhr.open('GET', url+'?rand='+(Math.random() * 100));
     xhr.onload = () => {
         contentContainer.innerHTML = xhr.responseText;
     }
