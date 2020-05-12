@@ -13,7 +13,7 @@
 
 </div>
 <script>
-    new View({
+    new Vue({
         el: '#app',
         data: {
 
