@@ -391,8 +391,8 @@ new Vue({
     },
     methods: {
         getNames: function () {
-            if (this.$data.search.length > 2) {
-                console.log(this.$data.search);
+            if (this.toolbar.search.length > 2) {
+                this.loadArticles(this.toolbar.search);
             }
         },
         userInteraction:  function (login) {
