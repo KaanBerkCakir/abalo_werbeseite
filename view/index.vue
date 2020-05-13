@@ -3,14 +3,10 @@
 <head>
     <title>abalo</title>
     <meta charset="UTF-8">
-
-    <script src="https://kit.fontawesome.com/c1d25b9942.js"></script>
-    <script src="http://localhost:8000/cookie.js"></script>
     <script src="../vue/vue.js"></script>
     <link rel="stylesheet" href="../css/index-style.css">
     <link rel="stylesheet" href="../css/flex-style.css">
     <link rel="stylesheet" href="../css/category-card.css">
-    <link rel="stylesheet" type="text/css" href="http://localhost:8000/cookie.css">
 
 </head>
 <body>
@@ -20,7 +16,7 @@
             <span>Abalo</span>
             <span>Macht Altes Flüssig.</span>
         </div>
-        <input id="searchText" type="text" placeholder="Search.." name="search">
+        <input id="searchText" type="text" placeholder="Search.." v-model="search" v-on:input="getNames">
         <button id="user-button" onclick="userInteraction()"></button>
     </div>
     <div class="grow-1 row">

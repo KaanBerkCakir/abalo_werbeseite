@@ -1,26 +1,10 @@
+/*
 const inputSearch = document.getElementById('searchText');
 const userButton = document.getElementById('user-button');
 const contentContainer = document.getElementById('content');
 const hiddenBox = document.getElementById('hiddenBox');
 const menuElem = document.getElementById('menu');
-const menuJSON = [
-    {
-        item: 'Home',
-        subitems: []
-    },
-    {
-        item: 'Shop',
-        subitems: ['Stöbern', 'Anbieten']
-    },
-    {
-        item: 'Kategorien',
-        subitems: []
-    },
-    {
-        item: 'Unternehmen',
-        subitems: ['Philosophie', 'Karriere']
-    },
-];
+
 const color = ['backBlue', 'backGreen', 'backRed', 'backYellow'];
 
 var shopIsShown = false;
@@ -364,4 +348,37 @@ function logout() {
     xhr.send();
 }
 
-initView();
+//initView();
+*/
+const menuJSON = [
+    {
+        item: 'Home',
+        subitems: []
+    },
+    {
+        item: 'Shop',
+        subitems: ['Stöbern', 'Anbieten']
+    },
+    {
+        item: 'Kategorien',
+        subitems: []
+    },
+    {
+        item: 'Unternehmen',
+        subitems: ['Philosophie', 'Karriere']
+    },
+];
+
+new Vue ({
+    el: '#container',
+    data: {
+        search: null
+    },
+    methods: {
+        getNames: function () {
+            if (this.$data.search.length > 2) {
+                console.log(this.$data.search);
+            }
+        }
+    }
+});
