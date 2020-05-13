@@ -368,17 +368,96 @@ const menuJSON = [
         subitems: ['Philosophie', 'Karriere']
     },
 ];
+var reqArticles;
 
-new Vue ({
+new Vue({
     el: '#container',
     data: {
-        search: null
+        toolbar: {
+            signedIn: null,
+            search: null,
+        },
+        menu: {
+            hide: [false, false, false, true],
+            colors: ['backBlue', 'backGreen', 'backRed', 'backYellow'],
+            items: menuJSON,
+        },
+        lists: {
+            cart: [],
+            articles: [],
+        },
     },
     methods: {
         getNames: function () {
             if (this.$data.search.length > 2) {
                 console.log(this.$data.search);
             }
+        },
+        userInteraction: function (login) {
+            const xhr = new XMLHttpRequest();
+            if (login) {
+                xhr.open('GET', 'http://localhost:8000/authentification/login');
+                xhr.onload = () => {
+                    this.toolbar.signedIn = JSON.parse(xhr.response).user;
+                    const xhr2 = new XMLHttpRequest();
+                    xhr2.open('GET', 'http://localhost:8000/api/shoppingcarts/' + this.toolbar.signedIn);
+                    xhr2.onload = () => {
+                        console.log(xhr2.response);
+                        const xhr3 = new XMLHttpRequest();
+                        xhr3.open('GET', 'http://localhost:8000/api/shoppingcarts/' + JSON.parse(xhr2.response).id + '/articles');
+                        xhr3.onload = () => {
+                            this.lists.cart = JSON.parse(xhr3.response);
+                        }
+                        xhr3.send();
+                    }
+                    xhr2.send();
+                }
+            } else {
+                xhr.open('GET', 'http://localhost:8000/authentification/logout');
+                xhr.onload = () => {
+                    this.toolbar.signedIn = null;
+                    this.lists.cart = [];
+                }
+            }
+            xhr.withCredentials = true;
+            xhr.onerror = function () {
+            };
+            xhr.send();
+        },
+        chooseMenu: function (num) {
+            switch (num) {
+                case 0:
+                    loadHomeView();
+                    break;
+                case 1:
+                    this.hide[num] = !this.hide[num];
+                    break;
+                case 10:
+                    loadArticleListView();
+                    break;
+                case 11:
+                    loadCreateArticleView();
+                    break;
+                case 2:
+                    loadCategoriesView();
+                    break;
+                case 3:
+
+                    break;
+                case 30:
+                    // goto philosophie
+                    break;
+                case 31:
+                    // open karriere
+                    break;
+            }
+        },
+        total: function () {
+            let res = 0;
+            this.lists.cart.forEach(elem => {
+                res += elem.ab_price;
+            });
+            return res;
         }
-    }
+    },
 });
