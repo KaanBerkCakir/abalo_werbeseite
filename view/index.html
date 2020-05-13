@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+    <title>abalo</title>
     <meta charset="UTF-8">
-    <title>Abalo</title>
 
     <script src="https://kit.fontawesome.com/c1d25b9942.js"></script>
     <script src="http://localhost:8000/cookie.js"></script>
+    <script src="../vue/vue.js"></script>
     <link rel="stylesheet" href="../css/index-style.css">
     <link rel="stylesheet" href="../css/flex-style.css">
     <link rel="stylesheet" href="../css/category-card.css">
@@ -35,35 +36,8 @@
                 </div>
             </div>
         </div>
-        <div id="content" class="card grow-1 column al-center">
-            <!--<form method="POST"
-                  action="http://localhost:8000/api/article/create"
-                  onsubmit="return submitForm(this);" >
-                <label for="aName">Artikel Name:</label><br>
-                <input type="text" id="aName" name="name" required><br>
-                <label for="aPreis">Preis in Euro:</label><br>
-                <input type="number" id="aPreis" name="price" min=1><br>
-                <label for="aBeschreibung">Artikel Beschreibung:</label><br>
-                <textarea name="desc" rows="10" cols="30"></textarea><br>
-                <input id="hidden-input" type="hidden" name="creator" value="">
-                <input type="submit" value="Submit"/>
-            </form>
-            <form action="post-handler.php" method="POST" onsubmit="return submit(this);">
-                <label for="aName">Artikel Name:</label><br>
-                <input type="text" id="aName" name="name" required><br>
-                <label for="aPreis">Preis in Euro:</label><br>
-                <input type="number" id="aPreis" name="price" min=1><br>
-                <label for="aBeschreibung">Artikel Beschreibung:</label><br>
-                <textarea name="desc" rows="10" cols="30"></textarea><br>
-                <input type="submit" value="Submit">
-                <input id="hidden-input" type="hidden" name="creator" value="">
-            </form>-->
-        </div>
+        <div id="content" class="card grow-1 column al-center"></div></div>
     </div>
-</div>
-
-<div id="hiddenBox" hidden></div>
-
-<script src="http://localhost:8000/application.js"></script>
+    <script src="../js/application.js"></script>
 </body>
 </html>

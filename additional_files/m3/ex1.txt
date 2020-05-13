@@ -1,0 +1,27 @@
+MapBox Direction API:
+1. Zweck der API:
+    Berechnet die Route von einem Start- zu einem Endpunkt unter Berücksichtigung des ausgewählten Profils.
+2. Umgesetzte REST-Prinzipien:
+    Client-Server Aufteilung
+    Zustandslosigkeit
+    Cacheable
+    Einheitliche Schnittstelle
+    Mehrschichtige Systeme
+3. Level nach dem Richardson Maturity Model:
+    L2
+4. Versionierung:
+    Version im Pfad
+
+Twitter API:
+1. Zweck der API:
+    Einbinden der Funktionalitäten von Twitter in eigene Applikation
+2. Umgesetzte REST-Prinzipien:
+    Client-Server Aufteilung
+    Zustandslosigkeit
+    Cacheable
+    Einheitliche Schnittstelle
+    Mehrschichtige Systeme
+3. Level nach dem Richardson Maturity Model:
+    L3
+4. Versionierung:
+    Version im Pfad
