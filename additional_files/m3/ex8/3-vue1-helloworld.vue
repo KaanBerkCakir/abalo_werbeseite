@@ -10,13 +10,13 @@
 </head>
 <body>
 <div id="app">
-
+{{message}}
 </div>
 <script>
     new Vue({
         el: '#app',
         data: {
-
+            message: 'Hello World!'
         }
     });
 </script>

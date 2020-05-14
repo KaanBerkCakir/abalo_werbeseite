@@ -1,0 +1,9 @@
+
+• let a= () => { …}; a.toString();
+• Object.fromEntries()
+Array.prototype.flat(depth)
+Unterstützt Array.prototype.flat(depth). Es Reformatiert verschachtelte Arrays in ein einzelnes Array
+
+Object.fromEntries()
+Verwandelt eine Reihe an Einträgen in ein einzelnes Objekt.
+Quelle: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries
