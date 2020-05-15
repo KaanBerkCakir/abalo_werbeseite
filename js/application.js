@@ -392,7 +392,7 @@ new Vue({
     methods: {
         getNames: function () {
             if (this.toolbar.search.length > 2) {
-                this.loadArticles(this.toolbar.search);
+                this.loadArticles(this.toolbar.search, 5);
             }
         },
         userInteraction:  function (login) {
@@ -436,9 +436,13 @@ new Vue({
             });
             return res;
         },
-        loadArticles: function(input) {
+        loadArticles: function(input, limit) {
             const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'http://localhost:8000/api/articles/' + input);
+            if(limit) {
+                xhr.open('GET', 'http://localhost:8000/api/articles/' + input + '/limit/' + limit);
+            }else {
+                xhr.open('GET', 'http://localhost:8000/api/articles/' + input);
+            }
             xhr.onload = () => {
                 this.start = false;
                 reqArticles = JSON.parse(xhr.response);
@@ -483,13 +487,17 @@ new Vue({
             xhr.send();
         },
         addItem: function(id) {
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles/' + id);
-            xhr.onload = () => {
-                this.lists.cart = JSON.parse(xhr.response);
-                this.updateLists();
+            if(this.toolbar.signedIn) {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles/' + id);
+                xhr.onload = () => {
+                    this.lists.cart = JSON.parse(xhr.response);
+                    this.updateLists();
+                }
+                xhr.send();
+            }else {
+                alert('Du musst dafür angemeldet sein.');
             }
-            xhr.send();
         },
         updateLists: function () {
             this.lists.articles = [];
