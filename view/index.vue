@@ -83,7 +83,7 @@
                         <td>{{elem.ab_createdate}}</td>
                         <td>{{elem.ab_price}}</td>
                         <td>
-                            <button onclick="handleAdd(index)"><i class="fas fa-plus"></i></button>
+                            <button @click="addItem(elem.id)"><i class="fas fa-plus"></i></button>
                         </td>
                     </tr>
                 </table>
