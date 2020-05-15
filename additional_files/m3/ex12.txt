@@ -1,0 +1,3 @@
+In beiden Fällen erhält das Backend sehr viele Anfragen hintereinander.
+Dadurch kann es schnell zu einer Überlastung des Servers kommen.
+Vermeidbar wäre dies, wenn man die Daten einmal lädt und dann lokal speichert. So benötigt man viel wenige API Aufrufe
