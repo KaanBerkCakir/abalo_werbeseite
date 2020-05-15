@@ -1,9 +1,13 @@
 Array.prototype.flat(depth):
-    Unterstützt Array.prototype.flat(depth). Es Reformatiert verschachtelte Arrays in ein einzelnes Array
+    Unterstützt Array.prototype.flat(depth). Es Reformatiert verschachtelte Arrays in ein einzelnes Array.
+    Momentan keine Verwendung.
 
 let a= () => { }; a.toString():
-
+    Notwendig für die Serialisierung von Objekten.
+    Momentan keine Verwendung. Allerdings zu beginn des Projektes notwendig gewesen. Problem wurde jedoch anders gelöst.
 
 Object.fromEntries():
     Verwandelt eine Reihe an Einträgen in ein einzelnes Objekt.
-    Quelle: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries
+    Momentan keine Verwendung.
+
+Quelle: developer.mozilla.org
