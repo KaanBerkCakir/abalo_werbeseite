@@ -10,13 +10,16 @@
 </head>
 <body>
 <div id="app">
+    <input type="text" v-model="currentInput"/>
 
+    CurrentInput: {{ currentInput }}
 </div>
+
 <script>
     new Vue({
         el: '#app',
         data: {
-
+            currentInput: null
         }
     });
 </script>
