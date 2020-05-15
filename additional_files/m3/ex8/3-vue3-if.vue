@@ -9,14 +9,22 @@
     </style>
 </head>
 <body>
-<div id="app">
 
+<div id="app">
+    <div v-if="serverDown">
+        <h1>{{ header }}</h1>
+    </div>
+    <div v-else>
+        Server Up
+    </div>
 </div>
+
 <script>
     new Vue({
         el: '#app',
         data: {
-
+            header: 'Server Down',
+            serverDown: true
         }
     });
 </script>
