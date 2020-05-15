@@ -369,7 +369,7 @@ const menuJSON = [
     },
 ];
 var cart;
-var reqArticles;
+var reqArticles = [];
 
 new Vue({
     el: '#container',
@@ -409,6 +409,7 @@ new Vue({
                         xhr3.open('GET', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles');
                         xhr3.onload = () => {
                             this.lists.cart = JSON.parse(xhr3.response);
+                            this.updateLists();
                         }
                         xhr3.send();
                     }
@@ -420,6 +421,7 @@ new Vue({
                     cart = null;
                     this.toolbar.signedIn = null;
                     this.lists.cart = [];
+                    this.updateLists();
                 }
             }
             xhr.withCredentials = true;
@@ -435,17 +437,16 @@ new Vue({
             return res;
         },
         loadArticles: function(input) {
-            console.log('dsf');
             const xhr = new XMLHttpRequest();
             xhr.open('GET', 'http://localhost:8000/api/articles/' + input);
             xhr.onload = () => {
                 this.start = false;
-                this.lists.articles = JSON.parse(xhr.response);
+                reqArticles = JSON.parse(xhr.response);
+                this.updateLists();
             }
             xhr.send();
         },
         chooseMenu: function (num) {
-            console.log(num);
             switch (num) {
                 case 0:
                     this.start = true;
@@ -477,8 +478,36 @@ new Vue({
             xhr.open('DELETE', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles/' + id);
             xhr.onload = () => {
                 this.lists.cart = JSON.parse(xhr.response);
+                this.updateLists();
             }
             xhr.send();
+        },
+        addItem: function(id) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles/' + id);
+            xhr.onload = () => {
+                this.lists.cart = JSON.parse(xhr.response);
+                this.updateLists();
+            }
+            xhr.send();
+        },
+        updateLists: function () {
+            this.lists.articles = [];
+            reqArticles.forEach(elem => {
+                const tmp = this.lists.cart;
+                if(!cartContains(tmp, elem.id)){
+                    this.lists.articles.push(elem);
+                }
+            });
         }
     },
 });
+
+function cartContains(cart, id) {
+    for (let elem of cart) {
+        if (elem.id === id) {
+            return true;
+        }
+    }
+    return false;
+}
