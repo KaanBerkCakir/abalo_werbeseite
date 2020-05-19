@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>First Vue Input</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+
+    <div id="app">
+        {{ inputdata | euro}} <br>
+        <input type="text" v-model="inputdata">
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                inputdata: null
+            }
+        });
+        Vue.filter('euro', function (value) {
+
+            value.toString();
+           // return value.length;
+            if(value.length <= 2) {
+
+
+                value = "00," + value;
+            }
+            else {
+                for (let i = 0; i < value.length; i++ ) {
+
+                }
+            }
+
+            return value+='€';
+
+
+        });
+    </script>
+</body>
+</html>
