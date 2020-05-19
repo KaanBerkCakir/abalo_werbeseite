@@ -371,7 +371,34 @@ const menuJSON = [
 var cart;
 var reqArticles = [];
 
-new Vue({
+
+Vue.component('SiteHeader', {
+    data: function () {
+        return {
+            search: "",
+            signedIn: false
+        }
+    },
+    methods: {
+        getNames: function () {
+            if (this.search.length > 2) {
+                this.loadArticles(this.search, 5);
+            }
+        },
+        userInteraction: function (login) {
+            console.log(login);
+            this.signedIn = !this.signedIn;
+        },
+        loadArticles: function (input, limit) {
+            console.log(input);
+        },
+    },
+    template: '#site-header'
+});
+
+new Vue({ el: '#container' });
+
+/*new Vue({
     el: '#container',
     data: {
         start: true,
@@ -395,7 +422,7 @@ new Vue({
                 this.loadArticles(this.toolbar.search, 5);
             }
         },
-        userInteraction:  function (login) {
+        userInteraction: function (login) {
             const xhr = new XMLHttpRequest();
             if (login) {
                 xhr.open('GET', 'http://localhost:8000/authentification/login');
@@ -429,18 +456,18 @@ new Vue({
             };
             xhr.send();
         },
-        total: function() {
+        total: function () {
             let res = 0;
             this.lists.cart.forEach(elem => {
                 res += elem.ab_price;
             });
             return res;
         },
-        loadArticles: function(input, limit) {
+        loadArticles: function (input, limit) {
             const xhr = new XMLHttpRequest();
-            if(limit) {
+            if (limit) {
                 xhr.open('GET', 'http://localhost:8000/api/articles/' + input + '/limit/' + limit);
-            }else {
+            } else {
                 xhr.open('GET', 'http://localhost:8000/api/articles/' + input);
             }
             xhr.onload = () => {
@@ -477,7 +504,7 @@ new Vue({
                     break;
             }
         },
-        removeItem: function(id) {
+        removeItem: function (id) {
             const xhr = new XMLHttpRequest();
             xhr.open('DELETE', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles/' + id);
             xhr.onload = () => {
@@ -486,8 +513,8 @@ new Vue({
             }
             xhr.send();
         },
-        addItem: function(id) {
-            if(this.toolbar.signedIn) {
+        addItem: function (id) {
+            if (this.toolbar.signedIn) {
                 const xhr = new XMLHttpRequest();
                 xhr.open('POST', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles/' + id);
                 xhr.onload = () => {
@@ -495,7 +522,7 @@ new Vue({
                     this.updateLists();
                 }
                 xhr.send();
-            }else {
+            } else {
                 alert('Du musst dafür angemeldet sein.');
             }
         },
@@ -503,13 +530,13 @@ new Vue({
             this.lists.articles = [];
             reqArticles.forEach(elem => {
                 const tmp = this.lists.cart;
-                if(!cartContains(tmp, elem.id)){
+                if (!cartContains(tmp, elem.id)) {
                     this.lists.articles.push(elem);
                 }
             });
         }
     },
-});
+});*/
 
 function cartContains(cart, id) {
     for (let elem of cart) {
