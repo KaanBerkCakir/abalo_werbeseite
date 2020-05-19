@@ -316,7 +316,7 @@ Vue.component('StartComponent', {
 });
 
 Vue.component('AllArticlesComponent', {
-    props: ['find', 'cart'],
+    props: ['find', 'signed-in'],
     created: function () {
         this.fetchArticles();
     },
@@ -334,9 +334,10 @@ Vue.component('AllArticlesComponent', {
             xhr.onload = () => {
                 this.allArticles = JSON.parse(xhr.response).articles;
                 console.log(this.allArticles);
-                if (this.cart) {
+                if (this.signedIn) {
+                    cart = JSON.parse(localStorage.getItem('cart'));
                     const xhr = new XMLHttpRequest();
-                    xhr.open('GET', 'http://localhost:8000/api/shoppingcarts/' + this.cart + '/articles');
+                    xhr.open('GET', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles');
                     xhr.onload = () => {
                         this.articlesOnCart = JSON.parse(xhr.response);
                     }
@@ -350,6 +351,9 @@ Vue.component('AllArticlesComponent', {
             };
             xhr.send();
         },
+        total: function () {
+
+        },
         updateLists: function () {
             this.buyableArticles = [];
             this.allArticles.forEach(elem => {
@@ -358,8 +362,21 @@ Vue.component('AllArticlesComponent', {
                 }
             });
         },
-        total: function () {
-
+        addItem: function (elem) {
+            if (this.signedIn) {
+                cart = JSON.parse(localStorage.getItem('cart'));
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles/' + elem);
+                xhr.onload = () => {
+                    this.articlesOnCart = JSON.parse(xhr.response);
+                    this.updateLists();
+                }
+                xhr.onerror = function () {
+                };
+                xhr.send();
+            } else {
+                alert('Sie müssen sich zuerst anmelden');
+            }
         }
     },
     template: '#all-articles-component'
@@ -412,14 +429,15 @@ new Vue({
                 const xhr = new XMLHttpRequest();
                 xhr.open('GET', 'http://localhost:8000/api/shoppingcarts/' + this.user);
                 xhr.onload = () => {
-                    this.cart = JSON.parse(xhr.response)['id'];
+                    this.cart = JSON.parse(xhr.response);
+                    localStorage.setItem('cart', JSON.stringify(this.cart));
                 }
                 xhr.onerror = function () {
 
                 };
                 xhr.send();
             } else {
-                this.cart = "";
+                localStorage.setItem('cart', "");
             }
         }
     }

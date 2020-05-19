@@ -16,7 +16,7 @@
     <div class="grow-1 row">
         <site-nav-bar-component v-on:router="choose" :colors='colors'></site-nav-bar-component>
         <start-component v-if="choice === 0"></start-component>
-        <all-articles-component v-else-if="choice === 10" :find="input" :cart="cart"></all-articles-component>
+        <all-articles-component v-else-if="choice === 10" :find="input" :signed-in="user"></all-articles-component>
         <category-component v-else-if="choice === 2" :colors='colors'></category-component>
     </div>
 </div>
@@ -86,9 +86,9 @@
 
 <script type="text/x-template" id="all-articles-component">
     <div id="content" class="card grow-1 column al-center">
-    <span v-if="cart && articlesOnCart.length === 0"
+    <span v-if="signedIn && articlesOnCart.length === 0"
           id="shopping-card-null">Der Warenkorb ist leer.</span>
-        <div v-else-if="cart && articlesOnCart.length > 0" id="shopping-card-list"
+        <div v-else-if="signedIn && articlesOnCart.length > 0" id="shopping-card-list"
              class="al-s-stretch column al-s-stretch">
             <span class="al-s-center">Warenkorb</span>
             <ul id="all-articles-ul">
