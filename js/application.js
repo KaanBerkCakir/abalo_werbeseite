@@ -333,26 +333,32 @@ Vue.component('AllArticlesComponent', {
             xhr.open('GET', 'http://localhost:8000/api/articles/' + this.find);
             xhr.onload = () => {
                 this.allArticles = JSON.parse(xhr.response).articles;
-                console.log(this.allArticles);
                 if (this.signedIn) {
                     cart = JSON.parse(localStorage.getItem('cart'));
-                    const xhr = new XMLHttpRequest();
-                    xhr.open('GET', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles');
-                    xhr.onload = () => {
-                        this.articlesOnCart = JSON.parse(xhr.response);
+                    const xhr2 = new XMLHttpRequest();
+                    xhr2.open('GET', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles');
+                    xhr2.onload = () => {
+                        console.log(xhr2.response);
+                        this.articlesOnCart = JSON.parse(xhr2.response);
+                        this.updateLists();
                     }
-                    xhr.onerror = function () {
+                    xhr2.onerror = function () {
                     };
-                    xhr.send();
+                    xhr2.send();
+                } else {
+                    this.updateLists();
                 }
-                this.updateLists();
             }
             xhr.onerror = function () {
             };
             xhr.send();
         },
         total: function () {
-
+            let sum = 0;
+            this.articlesOnCart.forEach(elem => {
+                sum += elem.ab_price;
+            });
+            return sum;
         },
         updateLists: function () {
             this.buyableArticles = [];
@@ -367,6 +373,23 @@ Vue.component('AllArticlesComponent', {
                 cart = JSON.parse(localStorage.getItem('cart'));
                 const xhr = new XMLHttpRequest();
                 xhr.open('POST', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles/' + elem);
+                xhr.onload = () => {
+                    console.log(xhr.response);
+                    this.articlesOnCart = JSON.parse(xhr.response);
+                    this.updateLists();
+                }
+                xhr.onerror = function () {
+                };
+                xhr.send();
+            } else {
+                alert('Sie müssen sich zuerst anmelden');
+            }
+        },
+        removeItem: function (elem) {
+            if (this.signedIn) {
+                cart = JSON.parse(localStorage.getItem('cart'));
+                const xhr = new XMLHttpRequest();
+                xhr.open('DELETE', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles/' + elem);
                 xhr.onload = () => {
                     this.articlesOnCart = JSON.parse(xhr.response);
                     this.updateLists();

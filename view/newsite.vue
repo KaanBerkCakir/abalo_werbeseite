@@ -98,8 +98,8 @@
                             <span>{{elem.ab_name}}</span>
                             <span class="al-s-stretch grow-1" style="text-align: end">{{elem.ab_price}}€</span>
                             <div>
-                                <button class="btn" @click="removeItem(elem.id)"><i class="fas fa-minus-circle"
-                                                                                    style="color: #bc2d2d"></i>
+                                <button class="btn" @click="removeItem(elem.id)">
+                                    <i class="fas fa-minus-circle" style="color: #bc2d2d"></i>
                                 </button>
                             </div>
                         </div>
