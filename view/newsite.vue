@@ -12,9 +12,9 @@
 </head>
 <body>
 <div id="container" class="column">
-    <site-header></site-header>
+    <site-header-component></site-header-component>
     <div class="grow-1 row">
-        <site-nav-bar v-on:router="choose" :colors='colors'></site-nav-bar>
+        <site-nav-bar-component v-on:router="choose" :colors='colors'></site-nav-bar-component>
         <start-component v-if="choice === 0"></start-component>
         <category-component v-else-if="choice === 2" :colors='colors'></category-component>
     </div>
@@ -22,7 +22,7 @@
 
 
 <!-- component html templates -->
-<script type="text/x-template" id="site-header">
+<script type="text/x-template" id="site-header-component">
     <div id="navbar" class="row al-end">
         <div id="title" class="grow-1 column jc-end">
             <span>Abalo</span>
@@ -36,7 +36,7 @@
 </script>
 
 
-<script type="text/x-template" id="site-nav-bar">
+<script type="text/x-template" id="site-nav-bar-component">
     <div id="sidenav" class="card column jc-between">
         <div id="menu" class="column al-s-center">
             <template v-for="(item, itemIndex) in items">

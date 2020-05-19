@@ -248,7 +248,7 @@ var cart;
 var reqArticles = [];
 
 
-Vue.component('SiteHeader', {
+Vue.component('SiteHeaderComponent', {
     data: function () {
         return {
             search: "",
@@ -269,10 +269,10 @@ Vue.component('SiteHeader', {
             console.log(input);
         },
     },
-    template: '#site-header'
+    template: '#site-header-component'
 });
 
-Vue.component('SiteNavBar', {
+Vue.component('SiteNavBarComponent', {
     props: {
         colors: {
             type: Array,
@@ -327,7 +327,7 @@ Vue.component('SiteNavBar', {
             }
         },
     },
-    template: '#site-nav-bar'
+    template: '#site-nav-bar-component'
 });
 
 Vue.component('StartComponent', {
