@@ -338,7 +338,6 @@ Vue.component('AllArticlesComponent', {
                     const xhr2 = new XMLHttpRequest();
                     xhr2.open('GET', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles');
                     xhr2.onload = () => {
-                        console.log(xhr2.response);
                         this.articlesOnCart = JSON.parse(xhr2.response);
                         this.updateLists();
                     }
@@ -374,7 +373,6 @@ Vue.component('AllArticlesComponent', {
                 const xhr = new XMLHttpRequest();
                 xhr.open('POST', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles/' + elem);
                 xhr.onload = () => {
-                    console.log(xhr.response);
                     this.articlesOnCart = JSON.parse(xhr.response);
                     this.updateLists();
                 }
@@ -399,6 +397,25 @@ Vue.component('AllArticlesComponent', {
                 xhr.send();
             } else {
                 alert('Sie müssen sich zuerst anmelden');
+            }
+        }
+    },
+    watch: {
+        signedIn: function (val, oldVal) {
+            if(val){
+                cart = JSON.parse(localStorage.getItem('cart'));
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles');
+                xhr.onload = () => {
+                    this.articlesOnCart = JSON.parse(xhr.response);
+                    this.updateLists();
+                }
+                xhr.onerror = function () {
+                };
+                xhr.send();
+            }else{
+                this.articlesOnCart = [];
+                this.buyableArticles = [...this.allArticles];
             }
         }
     },
@@ -447,13 +464,13 @@ new Vue({
             }
         },
         updateUser: function (user) {
-            this.user = user;
             if (user) {
                 const xhr = new XMLHttpRequest();
-                xhr.open('GET', 'http://localhost:8000/api/shoppingcarts/' + this.user);
+                xhr.open('GET', 'http://localhost:8000/api/shoppingcarts/' + user);
                 xhr.onload = () => {
                     this.cart = JSON.parse(xhr.response);
                     localStorage.setItem('cart', JSON.stringify(this.cart));
+                    this.user = user;
                 }
                 xhr.onerror = function () {
 
@@ -461,6 +478,7 @@ new Vue({
                 xhr.send();
             } else {
                 localStorage.setItem('cart', "");
+                this.user = user;
             }
         }
     }
