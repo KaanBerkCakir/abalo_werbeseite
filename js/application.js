@@ -1,26 +1,10 @@
+/*
 const inputSearch = document.getElementById('searchText');
 const userButton = document.getElementById('user-button');
 const contentContainer = document.getElementById('content');
 const hiddenBox = document.getElementById('hiddenBox');
 const menuElem = document.getElementById('menu');
-const menuJSON = [
-    {
-        item: 'Home',
-        subitems: []
-    },
-    {
-        item: 'Shop',
-        subitems: ['Stöbern', 'Anbieten']
-    },
-    {
-        item: 'Kategorien',
-        subitems: []
-    },
-    {
-        item: 'Unternehmen',
-        subitems: ['Philosophie', 'Karriere']
-    },
-];
+
 const color = ['backBlue', 'backGreen', 'backRed', 'backYellow'];
 
 var shopIsShown = false;
@@ -364,4 +348,174 @@ function logout() {
     xhr.send();
 }
 
-initView();
+//initView();
+*/
+const menuJSON = [
+    {
+        item: 'Home',
+        subitems: []
+    },
+    {
+        item: 'Shop',
+        subitems: ['Stöbern', 'Anbieten']
+    },
+    {
+        item: 'Kategorien',
+        subitems: []
+    },
+    {
+        item: 'Unternehmen',
+        subitems: ['Philosophie', 'Karriere']
+    },
+];
+var cart;
+var reqArticles = [];
+
+new Vue({
+    el: '#container',
+    data: {
+        start: true,
+        toolbar: {
+            signedIn: null,
+            search: null,
+        },
+        menu: {
+            hide: [false, false, false, true],
+            colors: ['backBlue', 'backGreen', 'backRed', 'backYellow'],
+            items: menuJSON,
+        },
+        lists: {
+            cart: [],
+            articles: [],
+        },
+    },
+    methods: {
+        getNames: function () {
+            if (this.toolbar.search.length > 2) {
+                this.loadArticles(this.toolbar.search, 5);
+            }
+        },
+        userInteraction:  function (login) {
+            const xhr = new XMLHttpRequest();
+            if (login) {
+                xhr.open('GET', 'http://localhost:8000/authentification/login');
+                xhr.onload = () => {
+                    this.toolbar.signedIn = JSON.parse(xhr.response).user;
+                    const xhr2 = new XMLHttpRequest();
+                    xhr2.open('GET', 'http://localhost:8000/api/shoppingcarts/' + this.toolbar.signedIn);
+                    xhr2.onload = () => {
+                        cart = JSON.parse(xhr2.response);
+                        const xhr3 = new XMLHttpRequest();
+                        xhr3.open('GET', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles');
+                        xhr3.onload = () => {
+                            this.lists.cart = JSON.parse(xhr3.response);
+                            this.updateLists();
+                        }
+                        xhr3.send();
+                    }
+                    xhr2.send();
+                }
+            } else {
+                xhr.open('GET', 'http://localhost:8000/authentification/logout');
+                xhr.onload = () => {
+                    cart = null;
+                    this.toolbar.signedIn = null;
+                    this.lists.cart = [];
+                    this.updateLists();
+                }
+            }
+            xhr.withCredentials = true;
+            xhr.onerror = function () {
+            };
+            xhr.send();
+        },
+        total: function() {
+            let res = 0;
+            this.lists.cart.forEach(elem => {
+                res += elem.ab_price;
+            });
+            return res;
+        },
+        loadArticles: function(input, limit) {
+            const xhr = new XMLHttpRequest();
+            if(limit) {
+                xhr.open('GET', 'http://localhost:8000/api/articles/' + input + '/limit/' + limit);
+            }else {
+                xhr.open('GET', 'http://localhost:8000/api/articles/' + input);
+            }
+            xhr.onload = () => {
+                this.start = false;
+                reqArticles = JSON.parse(xhr.response);
+                this.updateLists();
+            }
+            xhr.send();
+        },
+        chooseMenu: function (num) {
+            switch (num) {
+                case 0:
+                    this.start = true;
+                    break;
+                case 1:
+                    this.hide[num] = !this.hide[num];
+                    break;
+                case 10:
+                    this.loadArticles('%');
+                    break;
+                case 11:
+                    loadCreateArticleView();
+                    break;
+                case 2:
+                    break;
+                case 3:
+
+                    break;
+                case 30:
+                    // goto philosophie
+                    break;
+                case 31:
+                    // open karriere
+                    break;
+            }
+        },
+        removeItem: function(id) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('DELETE', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles/' + id);
+            xhr.onload = () => {
+                this.lists.cart = JSON.parse(xhr.response);
+                this.updateLists();
+            }
+            xhr.send();
+        },
+        addItem: function(id) {
+            if(this.toolbar.signedIn) {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles/' + id);
+                xhr.onload = () => {
+                    this.lists.cart = JSON.parse(xhr.response);
+                    this.updateLists();
+                }
+                xhr.send();
+            }else {
+                alert('Du musst dafür angemeldet sein.');
+            }
+        },
+        updateLists: function () {
+            this.lists.articles = [];
+            reqArticles.forEach(elem => {
+                const tmp = this.lists.cart;
+                if(!cartContains(tmp, elem.id)){
+                    this.lists.articles.push(elem);
+                }
+            });
+        }
+    },
+});
+
+function cartContains(cart, id) {
+    for (let elem of cart) {
+        if (elem.id === id) {
+            return true;
+        }
+    }
+    return false;
+}

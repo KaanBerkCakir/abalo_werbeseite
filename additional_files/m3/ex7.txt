@@ -1,0 +1,5 @@
+Features Vue.js Plugin
+
+1. Vue-specific code completion
+2. Vue-specific navigation
+3. Refactoring for .vue files enabled

@@ -1,0 +1,18 @@
+1. Was war die Motivation für die Entwicklung von Vue?
+Ewan You arbeitete zu der Zeit viel mit Javascript. Er mochte die erhältlichen Frameworks nichts, und kreirte so sein eigenes. Motivation dahinter war es
+ein Framework zu schaffen was er selbst gerne nutzen würde.
+
+2. Warum hat Evan You nicht Backbone verwendet?
+Es wirkte auf Evan eher wie ein Application Structre Managementprogramm. Ihm fehlte flexibilit�t.
+
+3. Laravel und Vue - aus welchen Gründen passt es für den Gründer von
+Laravel zusammen?
+Vue.js war ser simpel zu bedienen, und er konnte es alleine mit Notepad benutzen. Jedoch verzichtete es nicht auf Möchtigkeit.
+
+4. Warum sind viele EntwicklerInnen von Angular nach Vue gewechselt?
+Einer der Gründe war das Endorsment vom Laravelgründer( Taylor otwell).
+Es kam Angular 2 raus, welches zuvieles geändert hatte, und eine Lücke im Markt hinterließ die früher von AngularJS gefüllt wurde.
+
+6. Was sind nach Ihrer Meinung die Gründe für den Erfolg von Vue.js?
+Ewan You,s Enthusiamus, das es eine gute chinesische Dokumentation gab, und das Vue.js sehr Einsteigerfreundlich war. Auch half es das Ewan you die einzige kreative Force hinter dem Projekt
+war, somit wirkt alles viel schlüssiger, als wenn sich viele dran gesetzt hätten.
