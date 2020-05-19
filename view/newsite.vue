@@ -12,10 +12,11 @@
 </head>
 <body>
 <div id="container" class="column">
-    <site-header-component></site-header-component>
+    <site-header-component v-on:sign-in="updateUser" :signed-in="user"></site-header-component>
     <div class="grow-1 row">
         <site-nav-bar-component v-on:router="choose" :colors='colors'></site-nav-bar-component>
         <start-component v-if="choice === 0"></start-component>
+        <all-articles-component v-else-if="choice === 10" :find="input" :cart="cart"></all-articles-component>
         <category-component v-else-if="choice === 2" :colors='colors'></category-component>
     </div>
 </div>
@@ -28,10 +29,13 @@
             <span>Abalo</span>
             <span>Macht Altes Flüssig.</span>
         </div>
-        <input id="searchText" type="text" placeholder="Search.." v-model="search" v-on:input="getNames">
-        <button v-if="!signedIn" id="user-button" @click="userInteraction(true)"><i
-                class="fas fa-sign-out-alt"></i></button>
-        <button v-else id="user-button" @click="userInteraction(false)"><i class="fas fa-sign-in-alt"></i></button>
+        <input id="searchText" type="text" placeholder="Search.." v-model="search" v-on:input="searchForNames">
+        <button v-if="signedIn" id="user-button" @click="userInteraction(false)">
+            <i class="fas fa-sign-out-alt"></i>
+        </button>
+        <button v-else id="user-button" @click="userInteraction(true)">
+            <i class="fas fa-sign-in-alt"></i>
+        </button>
     </div>
 </script>
 
@@ -76,6 +80,56 @@
                 </div>
             </div>
         </div>
+    </div>
+</script>
+
+
+<script type="text/x-template" id="all-articles-component">
+    <div id="content" class="card grow-1 column al-center">
+    <span v-if="cart && articlesOnCart.length === 0"
+          id="shopping-card-null">Der Warenkorb ist leer.</span>
+        <div v-else-if="cart && articlesOnCart.length > 0" id="shopping-card-list"
+             class="al-s-stretch column al-s-stretch">
+            <span class="al-s-center">Warenkorb</span>
+            <ul id="all-articles-ul">
+                <template v-for="elem in articlesOnCart">
+                    <li>
+                        <div class="row">
+                            <span>{{elem.ab_name}}</span>
+                            <span class="al-s-stretch grow-1" style="text-align: end">{{elem.ab_price}}€</span>
+                            <div>
+                                <button class="btn" @click="removeItem(elem.id)"><i class="fas fa-minus-circle"
+                                                                                    style="color: #bc2d2d"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                </template>
+            </ul>
+            <span id="shopping-card-total-costs" class="al-s-end">{{total()}}€</span>
+        </div>
+
+        <span v-if="buyableArticles.length === 0" id="all-articles-null">Keine Artikel vorhanden.</span>
+        <table v-if="buyableArticles.length > 0" id="all-articles-list">
+            <tr id="all-articles-head">
+                <th>Artikel-Id</th>
+                <th>Name</th>
+                <th>Beschreibung</th>
+                <th>Erstellt am</th>
+                <th>Preis</th>
+                <th>Wk</th>
+            </tr>
+            <tr v-for="(elem,index) in buyableArticles">
+                <td>{{elem.id}}</td>
+                <td>{{elem.ab_name}}</td>
+                <td>{{elem.ab_description}}</td>
+                <td>{{elem.ab_createdate}}</td>
+                <td>{{elem.ab_price}}</td>
+                <td>
+                    <button @click="addItem(elem.id)"><i class="fas fa-plus"></i></button>
+                </td>
+            </tr>
+        </table>
     </div>
 </script>
 <script src="../js/application.js"></script>
