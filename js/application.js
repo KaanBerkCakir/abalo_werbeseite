@@ -1,128 +1,4 @@
 /*
-const inputSearch = document.getElementById('searchText');
-const userButton = document.getElementById('user-button');
-const contentContainer = document.getElementById('content');
-const hiddenBox = document.getElementById('hiddenBox');
-const menuElem = document.getElementById('menu');
-
-const color = ['backBlue', 'backGreen', 'backRed', 'backYellow'];
-
-var shopIsShown = false;
-var companyIsShown = false;
-var menuHTML = '';
-var signedIn;
-
-menuJSON.forEach((item, itemIndex) => {
-    menuHTML += '<span id="item' + itemIndex + '" class="item link" onclick="chooseMenu(' + itemIndex + ')">' + item.item + '</span>';
-    if (item.subitems.length > 0) {
-        item.subitems.forEach((subitem, subitemIndex) => {
-            menuHTML += '<span id="subitem' + itemIndex + subitemIndex + '" class="subitem link hidden ' + color[itemIndex % 4] + '" onclick="chooseMenu(' + itemIndex + subitemIndex + ')">' + subitem + '</span>';
-        });
-    }
-});
-
-inputSearch.addEventListener("keyup", function (event) {
-    if (event.key === "Enter") {
-        requestArticles(inputSearch.value);
-        inputSearch.value = '';
-    }
-});
-
-function initView() {
-    // localStorage.removeItem('cookieconsent');
-    if (!isConsentGiven()) {
-        signedIn = null;
-        localStorage.removeItem('user');
-        localStorage.removeItem('cart');
-    } else {
-        signedIn = localStorage.getItem('user') === null ? null : localStorage.getItem('user');
-        cartId = localStorage.getItem('cart') === null ? null : localStorage.getItem('cart');
-    }
-    updateUserButton();
-
-    menuElem.innerHTML = menuHTML;
-    loadHomeView();
-}
-
-function chooseMenu(num) {
-    switch (num) {
-        case 0:
-            loadHomeView();
-            break;
-        case 1:
-            if (shopIsShown) {
-                shopIsShown = false;
-                hideSubitems(num);
-            } else {
-                shopIsShown = true;
-                showSubitems(num);
-            }
-            break;
-        case 10:
-            loadArticleListView();
-            break;
-        case 11:
-            loadCreateArticleView();
-            break;
-        case 2:
-            loadCategoriesView();
-            break;
-        case 3:
-            if (companyIsShown) {
-                companyIsShown = false;
-                hideSubitems(num);
-            } else {
-                companyIsShown = true;
-                showSubitems(num);
-            }
-            break;
-        case 30:
-            // goto philosophie
-            break;
-        case 31:
-            // open karriere
-            break;
-    }
-}
-
-function hideSubitems(num) {
-    const length = menuJSON[num].subitems.length;
-    for (let i = 0; i < length; i++) {
-        document.getElementById('subitem' + num + i).classList.add('hidden');
-    }
-}
-
-function showSubitems(num) {
-    const length = menuJSON[num].subitems.length;
-    for (let i = 0; i < length; i++) {
-        document.getElementById('subitem' + num + i).classList.remove('hidden');
-    }
-}
-
-function loadHomeView() {
-    setActive('item0');
-    loadFile('../vue/start.html');
-}
-
-function loadCategoriesView() {
-    setActive('item2');
-    loadFile('../vue/categories.vue');
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:8000/api/categories');
-    xhr.onload = () => {
-        var vm = new Vue({
-            el: '#content',
-            data: {
-                categories: JSON.parse(xhr.response),
-                colors: color
-            }
-        });
-    }
-    xhr.onerror = function () {
-    };
-    xhr.send();
-}
-
 function loadFile(url) {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', url+'?rand='+(Math.random() * 100));
@@ -397,11 +273,16 @@ Vue.component('SiteHeader', {
 });
 
 Vue.component('SiteNavBar', {
+    props: {
+        colors: {
+            type: Array,
+            required: true
+        }
+    },
     data: function () {
         return {
             choice: 0,
             hide: [false, true, false, true],
-            colors: ['backBlue', 'backGreen', 'backRed', 'backYellow'],
             items: menuJSON,
         }
     },
@@ -460,10 +341,41 @@ Vue.component('StartComponent', {
     template: '#start-component'
 });
 
+Vue.component('CategoryComponent', {
+    props: {
+        colors: {
+            type: Array,
+            required: true
+        }
+    },
+    created: function () {
+        this.fetchCategories();
+    },
+    data: function () {
+        return {
+            categories: []
+        }
+    },
+    methods: {
+        fetchCategories: function () {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://localhost:8000/api/categories');
+            xhr.onload = () => {
+                this.categories = JSON.parse(xhr.response);
+            }
+            xhr.onerror = function () {
+            };
+            xhr.send();
+        }
+    },
+    template: '#category-component'
+});
+
 new Vue({
     el: '#container',
     data: {
-        choice: 0
+        choice: 0,
+        colors: ['backBlue', 'backGreen', 'backRed', 'backYellow'],
     },
     methods: {
         choose: function(link) {

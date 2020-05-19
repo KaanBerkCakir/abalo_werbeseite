@@ -14,10 +14,9 @@
 <div id="container" class="column">
     <site-header></site-header>
     <div class="grow-1 row">
-        <site-nav-bar v-on:router="choose"></site-nav-bar>
-        <div id="content" class="card grow-1 column al-center">
-            <start-component v-if="choice === 0"></start-component>
-        </div>
+        <site-nav-bar v-on:router="choose" :colors='colors'></site-nav-bar>
+        <start-component v-if="choice === 0"></start-component>
+        <category-component v-else-if="choice === 2" :colors='colors'></category-component>
     </div>
 </div>
 
@@ -41,9 +40,11 @@
     <div id="sidenav" class="card column jc-between">
         <div id="menu" class="column al-s-center">
             <template v-for="(item, itemIndex) in items">
-                <span :id='"item" + itemIndex' :class="{active: itemIndex === choice}" class="item link" @click="chooseMenu(itemIndex)">{{item.item}}</span>
+                <span :id='"item" + itemIndex' :class="{active: itemIndex === choice}" class="item link"
+                      @click="chooseMenu(itemIndex)">{{item.item}}</span>
                 <span v-for="(subitem, subitemIndex) in item.subitems" :id='"subitem" + itemIndex + subitemIndex'
-                      class="subitem link" :class="{[colors[itemIndex%4]]:true, hidden: hide[itemIndex], active: (itemIndex*10 + subitemIndex) === choice}"
+                      class="subitem link"
+                      :class="{[colors[itemIndex%4]]:true, hidden: hide[itemIndex], active: (itemIndex*10 + subitemIndex) === choice}"
                       @click="chooseMenu(itemIndex*10 + subitemIndex)">{{subitem}}</span>
             </template>
         </div>
@@ -59,7 +60,23 @@
 
 
 <script type="text/x-template" id="start-component">
-    <span>Herzlich Willkommen</span>
+    <div id="content" class="card grow-1 column al-center">
+        <span>Herzlich Willkommen</span>
+    </div>
+</script>
+
+
+<script type="text/x-template" id="category-component">
+    <div id="content" class="card grow-1 column al-center">
+        <div class="row al-s-stretch">
+            <div v-for="(parent, index) in categories" :class="{[colors[index%4]]:true}" class="cat-card column">
+                <div class="cat-card-header al-s-center">{{parent.parent}}</div>
+                <div class="cat-card-content column">
+                    <span v-for="child in parent.children">{{child.ab_name}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </script>
 <script src="../js/application.js"></script>
 </body>
