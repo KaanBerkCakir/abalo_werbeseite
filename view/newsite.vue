@@ -13,17 +13,13 @@
 <body>
 <div id="container" class="column">
     <site-header></site-header>
-    <div id="content" class="card grow-1 column al-center">
-        <site-nav-bar></site-nav-bar>
+    <div class="grow-1 row">
+        <site-nav-bar v-on:router="choose"></site-nav-bar>
+        <div id="content" class="card grow-1 column al-center">
+            <start-component v-if="choice === 0"></start-component>
+        </div>
     </div>
 </div>
-
-
-
-
-
-
-
 
 
 <!-- component html templates -->
@@ -45,9 +41,9 @@
     <div id="sidenav" class="card column jc-between">
         <div id="menu" class="column al-s-center">
             <template v-for="(item, itemIndex) in items">
-                <span :id='"item" + itemIndex' class="item link" @click="chooseMenu(itemIndex)">{{item.item}}</span>
+                <span :id='"item" + itemIndex' :class="{active: itemIndex === choice}" class="item link" @click="chooseMenu(itemIndex)">{{item.item}}</span>
                 <span v-for="(subitem, subitemIndex) in item.subitems" :id='"subitem" + itemIndex + subitemIndex'
-                      class="subitem link" :class="{[colors[itemIndex%4]]:true, hidden: hide[itemIndex]}"
+                      class="subitem link" :class="{[colors[itemIndex%4]]:true, hidden: hide[itemIndex], active: (itemIndex*10 + subitemIndex) === choice}"
                       @click="chooseMenu(itemIndex*10 + subitemIndex)">{{subitem}}</span>
             </template>
         </div>
@@ -59,6 +55,11 @@
             </div>
         </div>
     </div>
+</script>
+
+
+<script type="text/x-template" id="start-component">
+    <span>Herzlich Willkommen</span>
 </script>
 <script src="../js/application.js"></script>
 </body>

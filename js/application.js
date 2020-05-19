@@ -399,6 +399,7 @@ Vue.component('SiteHeader', {
 Vue.component('SiteNavBar', {
     data: function () {
         return {
+            choice: 0,
             hide: [false, true, false, true],
             colors: ['backBlue', 'backGreen', 'backRed', 'backYellow'],
             items: menuJSON,
@@ -409,28 +410,37 @@ Vue.component('SiteNavBar', {
             const tmp = [...this.hide];
             switch (num) {
                 case 0:
-                    this.start = true;
+                    this.choice = num;
+                    this.$emit('router', num);
                     break;
                 case 1:
                     tmp[num] = !tmp[num];
                     this.hide = tmp;
                     break;
                 case 10:
-                    this.loadArticles('%');
+                    this.choice = num;
+                    this.$emit('router', num);
                     break;
                 case 11:
-                    loadCreateArticleView();
+                    this.choice = num;
+                    this.$emit('router', num);
                     break;
                 case 2:
+                    this.choice = num;
+                    this.$emit('router', num);
                     break;
                 case 3:
                     tmp[num] = !tmp[num];
                     this.hide = tmp;
                     break;
                 case 30:
+                    this.choice = num;
+                    this.$emit('router', num);
                     // goto philosophie
                     break;
                 case 31:
+                    this.choice = num;
+                    this.$emit('router', num);
                     // open karriere
                     break;
             }
@@ -439,7 +449,28 @@ Vue.component('SiteNavBar', {
     template: '#site-nav-bar'
 });
 
-new Vue({el: '#container'});
+Vue.component('StartComponent', {
+    data: function () {
+        return {
+
+        }
+    },
+    methods: {
+    },
+    template: '#start-component'
+});
+
+new Vue({
+    el: '#container',
+    data: {
+        choice: 0
+    },
+    methods: {
+        choose: function(link) {
+            this.choice = link;
+        }
+    }
+});
 
 /*new Vue({
     el: '#container',
