@@ -13,8 +13,20 @@
 <body>
 <div id="container" class="column">
     <site-header></site-header>
+    <div id="content" class="card grow-1 column al-center">
+        <site-nav-bar></site-nav-bar>
+    </div>
 </div>
 
+
+
+
+
+
+
+
+
+<!-- component html templates -->
 <script type="text/x-template" id="site-header">
     <div id="navbar" class="row al-end">
         <div id="title" class="grow-1 column jc-end">
@@ -25,6 +37,27 @@
         <button v-if="!signedIn" id="user-button" @click="userInteraction(true)"><i
                 class="fas fa-sign-out-alt"></i></button>
         <button v-else id="user-button" @click="userInteraction(false)"><i class="fas fa-sign-in-alt"></i></button>
+    </div>
+</script>
+
+
+<script type="text/x-template" id="site-nav-bar">
+    <div id="sidenav" class="card column jc-between">
+        <div id="menu" class="column al-s-center">
+            <template v-for="(item, itemIndex) in items">
+                <span :id='"item" + itemIndex' class="item link" @click="chooseMenu(itemIndex)">{{item.item}}</span>
+                <span v-for="(subitem, subitemIndex) in item.subitems" :id='"subitem" + itemIndex + subitemIndex'
+                      class="subitem link" :class="{[colors[itemIndex%4]]:true, hidden: hide[itemIndex]}"
+                      @click="chooseMenu(itemIndex*10 + subitemIndex)">{{subitem}}</span>
+            </template>
+        </div>
+        <div id="impressum" class="column je">
+            <span>Kaan Berk Cakir</span>
+            <div class="row jc-between">
+                <span>Jonas Schell</span>
+                <span><span onclick="removeConsent()">&copy;</span> Copyright</span>
+            </div>
+        </div>
     </div>
 </script>
 <script src="../js/application.js"></script>

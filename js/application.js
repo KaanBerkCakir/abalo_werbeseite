@@ -396,7 +396,50 @@ Vue.component('SiteHeader', {
     template: '#site-header'
 });
 
-new Vue({ el: '#container' });
+Vue.component('SiteNavBar', {
+    data: function () {
+        return {
+            hide: [false, true, false, true],
+            colors: ['backBlue', 'backGreen', 'backRed', 'backYellow'],
+            items: menuJSON,
+        }
+    },
+    methods: {
+        chooseMenu: function (num) {
+            const tmp = [...this.hide];
+            switch (num) {
+                case 0:
+                    this.start = true;
+                    break;
+                case 1:
+                    tmp[num] = !tmp[num];
+                    this.hide = tmp;
+                    break;
+                case 10:
+                    this.loadArticles('%');
+                    break;
+                case 11:
+                    loadCreateArticleView();
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    tmp[num] = !tmp[num];
+                    this.hide = tmp;
+                    break;
+                case 30:
+                    // goto philosophie
+                    break;
+                case 31:
+                    // open karriere
+                    break;
+            }
+        },
+    },
+    template: '#site-nav-bar'
+});
+
+new Vue({el: '#container'});
 
 /*new Vue({
     el: '#container',
