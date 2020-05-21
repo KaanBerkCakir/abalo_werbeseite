@@ -140,7 +140,6 @@ function requestArticles(input) {
     xhr.open('GET', 'http://localhost:8000/api/article/' + input);
     xhr.onload = () => {
         articlesArray = JSON.parse(xhr.response);
-        console.log(articlesArray);
     }
     xhr.onerror = function () {
     };
@@ -445,7 +444,7 @@ new Vue({
             }
             xhr.onload = () => {
                 this.start = false;
-                reqArticles = JSON.parse(xhr.response);
+                reqArticles = JSON.parse(xhr.response).articles;
                 this.updateLists();
             }
             xhr.send();
