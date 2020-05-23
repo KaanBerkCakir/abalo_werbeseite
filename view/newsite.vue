@@ -12,11 +12,11 @@
 </head>
 <body>
 <div id="container" class="column">
-    <site-header-component v-on:sign-in="updateUser" :signed-in="user"></site-header-component>
+    <site-header-component :signed-in="user" v-on:sign-in="updateUser" v-on:search="findArticles"></site-header-component>
     <div class="grow-1 row">
         <site-nav-bar-component v-on:router="choose" :colors='colors'></site-nav-bar-component>
         <start-component v-if="choice === 0"></start-component>
-        <all-articles-component v-else-if="choice === 10" :find="input" :signed-in="user"></all-articles-component>
+        <all-articles-component v-else-if="choice === 10" :signed-in="user" :buyable-articles="articles" :articles-on-cart="cart" v-on:add="addToCart" v-on:remove="removeFromCart"></all-articles-component>
         <category-component v-else-if="choice === 2" :colors='colors'></category-component>
     </div>
 </div>
