@@ -18,9 +18,9 @@
             <span>Macht Altes Flüssig.</span>
         </div>
         <input id="searchText" type="text" placeholder="Search.." v-model="toolbar.search" v-on:input="getNames">
-        <button v-if="!toolbar.signedIn" id="user-button" @click="userInteraction(true)"><i
+        <button v-if="!toolbar.signedIn" id="icon-button" @click="userInteraction(true)"><i
                 class="fas fa-sign-out-alt"></i></button>
-        <button v-else id="user-button" @click="userInteraction(false)"><i class="fas fa-sign-in-alt"></i></button>
+        <button v-else id="icon-button" @click="userInteraction(false)"><i class="fas fa-sign-in-alt"></i></button>
     </div>
     <div class="grow-1 row">
         <div id="sidenav" class="card column jc-between">

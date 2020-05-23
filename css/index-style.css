@@ -176,9 +176,31 @@ tr:hover:not(#all-articles-head) {
     cursor: pointer; /* Mouse pointer on hover */
 }
 
-#user-button {
-    margin-right: 20px;
+.icon-button {
     background-color: transparent; /* Blue background */
     border: none; /* Remove borders */
     cursor: pointer; /* Mouse pointer on hover */
+}
+
+.login-button {
+    margin-right: 20px;
+}
+
+.white-icon {
+    color:#f0f0f0;
+    font-size: 25px;
+}
+
+#pagination {
+    background: #393d3f;
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.disabled {
+    color: grey;
+}
+
+.disabled:hover {
+    cursor: default;
 }

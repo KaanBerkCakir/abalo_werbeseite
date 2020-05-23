@@ -220,7 +220,9 @@ Vue.component('SiteHeaderComponent', {
     },
     methods: {
         searchForNames: function () {
-            if (this.search.length > 2) {
+            if (this.search.length === 0) {
+                this.$emit('%', this.search, 5);
+            } else if (this.search.length > 2) {
                 this.$emit('search', this.search, 5);
             }
         },
@@ -313,9 +315,22 @@ Vue.component('StartComponent', {
 });
 
 Vue.component('AllArticlesComponent', {
-    props: ['signedIn', 'articlesOnCart', 'buyableArticles'],
+    props: ['signedIn',
+        'articlesOnCart',
+        'buyableArticles',
+        'max'
+    ],
     data: function () {
-        return {}
+        return {
+            limit: 5,
+            category: 'all',
+            site: 1,
+            backwardsAllowed: false,
+            forwardsAllowed: true
+        }
+    },
+    created: function () {
+        // this.forwardsAllowed = !(this.max <= this.limit);
     },
     methods: {
         addItem: function (id) {
@@ -331,6 +346,31 @@ Vue.component('AllArticlesComponent', {
             });
             return sum;
         },
+        selectLim: function () {
+            this.$emit('limit', this.limit);
+        },
+        backward: function () {
+            this.site--;
+            this.$emit('set-site', this.site);
+            this.forwardsAllowed = true;
+            this.backwardsAllowed = this.site > 1;
+        },
+        forward: function () {
+            this.site++;
+            this.$emit('set-site', this.site);
+            this.backwardsAllowed = true;
+            this.forwardsAllowed = this.max > this.site*this.limit;
+        },
+        selectCat: function () {
+            this.$emit('categroy', this.category);
+        }
+    },
+    watch: {
+        max: function () {
+            this.site = 1;
+            this.backwardsAllowed = false;
+            this.forwardsAllowed = this.max > this.limit;
+        }
     },
     template: '#all-articles-component'
 });
@@ -365,19 +405,28 @@ new Vue({
     data: {
         choice: 0,
         colors: ['backBlue', 'backGreen', 'backRed', 'backYellow'],
-        input: "",
+        input: "%",
         user: "",
         cart: [],
-        articles: []
+        articles: [],
+        limit: 5,
+        category: 'all',
+        site: 1,
+        amount: 0
     },
     methods: {
         choose: function (link) {
             this.choice = link;
             if (link === 10) {
-                this.fetchArticles('http://localhost:8000/api/articles/%');
+                this.input = '%';
+                this.site = 1;
+                this.limit = 5;
+                this.category = 'all';
+                this.fetchArticles();
             }
         },
         updateUser: function (user) {
+            this.site = 1;
             if (user) {
                 const xhr = new XMLHttpRequest();
                 xhr.open('GET', 'http://localhost:8000/api/shoppingcarts/' + user);
@@ -388,8 +437,8 @@ new Vue({
                     if (this.choice === 10) {
                         xhr.open('GET', 'http://localhost:8000/api/shoppingcarts/' + JSON.parse(xhr.response).cart.id + '/articles');
                         xhr.onload = () => {
-                            console.log(xhr.response);
                             this.cart = JSON.parse(xhr.response).articles;
+                            this.updateArticleList();
                         }
                         xhr.send();
                     }
@@ -404,14 +453,18 @@ new Vue({
             }
         },
         findArticles: function (input, limit) {
+            this.site = 1;
             this.choice = 10;
-            this.fetchArticles('http://localhost:8000/api/articles/' + input + '/limit/' + limit);
+            this.input = input;
+            this.fetchArticles();
         },
-        fetchArticles: function (url) {
+        fetchArticles: function () {
             const xhr = new XMLHttpRequest();
-            xhr.open('GET', url);
+            const offset = (this.site * this.limit) - this.limit;
+            xhr.open('GET', 'http://localhost:8000/api/articles/' + this.input + '/limit/' + this.limit + '/offset/' + offset);
             xhr.onload = () => {
                 allArticles = JSON.parse(xhr.response).articles;
+                this.amount = JSON.parse(xhr.response).amount;
                 if (!this.user) {
                     this.articles = allArticles;
                 } else {
@@ -465,6 +518,17 @@ new Vue({
                     this.articles.push(elem);
                 }
             });
+        },
+        setLimit: function (limit) {
+            this.limit = limit;
+            this.fetchArticles();
+        },
+        updateSite: function (site) {
+            this.site = site;
+            this.fetchArticles();
+        },
+        setCategory: function (category) {
+            console.log(category);
         }
     }
 });

@@ -12,11 +12,17 @@
 </head>
 <body>
 <div id="container" class="column">
-    <site-header-component :signed-in="user" v-on:sign-in="updateUser" v-on:search="findArticles"></site-header-component>
+    <site-header-component :signed-in="user" v-on:sign-in="updateUser"
+                           v-on:search="findArticles"></site-header-component>
     <div class="grow-1 row">
         <site-nav-bar-component v-on:router="choose" :colors='colors'></site-nav-bar-component>
         <start-component v-if="choice === 0"></start-component>
-        <all-articles-component v-else-if="choice === 10" :signed-in="user" :buyable-articles="articles" :articles-on-cart="cart" v-on:add="addToCart" v-on:remove="removeFromCart"></all-articles-component>
+        <all-articles-component v-else-if="choice === 10"
+                                :signed-in="user" :buyable-articles="articles"
+                                :articles-on-cart="cart" :max="amount"
+                                v-on:add="addToCart" v-on:remove="removeFromCart"
+                                v-on:limit="setLimit" v-on:categroy="setCategory"
+                                v-on:set-site="updateSite"></all-articles-component>
         <category-component v-else-if="choice === 2" :colors='colors'></category-component>
     </div>
 </div>
@@ -30,10 +36,10 @@
             <span>Macht Altes Flüssig.</span>
         </div>
         <input id="searchText" type="text" placeholder="Search.." v-model="search" v-on:input="searchForNames">
-        <button v-if="signedIn" id="user-button" @click="userInteraction(false)">
+        <button v-if="signedIn" class="icon-button login-button" @click="userInteraction(false)">
             <i class="fas fa-sign-out-alt"></i>
         </button>
-        <button v-else id="user-button" @click="userInteraction(true)">
+        <button v-else class="icon-button login-button" @click="userInteraction(true)">
             <i class="fas fa-sign-in-alt"></i>
         </button>
     </div>
@@ -86,8 +92,40 @@
 
 <script type="text/x-template" id="all-articles-component">
     <div id="content" class="card grow-1 column al-center">
-    <span v-if="signedIn && articlesOnCart.length === 0"
-          id="shopping-card-null">Der Warenkorb ist leer.</span>
+        <div id="pagination" class="al-s-stretch row al-center jc-between">
+            <div style="width: 15%">
+                <select v-model="limit" @change="selectLim">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="0">Alle</option>
+                </select>
+            </div>
+            <button class="icon-button white-icon" :class="{'disabled': !backwardsAllowed}" :disabled="!backwardsAllowed" @click="backward">
+                <i class="fas fa-angle-left"></i>
+            </button>
+            <span class="white-icon">Seite: {{site}}</span>
+            <button class="icon-button white-icon" :class="{'disabled': !forwardsAllowed}" :disabled="!forwardsAllowed" @click="forward">
+                <i class="fas fa-angle-right"></i>
+            </button>
+            <div class="row jc-end" style="width: 15%">
+            <select v-model="category" @change="selectCat">
+                <option value="all">Kategorien</option>
+                <optgroup label="Swedish Cars">
+                    <option value="volvo">Volvo</option>
+                    <option value="saab">Saab</option>
+                </optgroup>
+                <optgroup label="German Cars">
+                    <option value="mercedes">Mercedes</option>
+                    <option value="audi">Audi</option>
+                </optgroup>
+            </select>
+            </div>
+        </div>
+        <span v-if="signedIn && articlesOnCart.length === 0" id="shopping-card-null">
+            Der Warenkorb ist leer.
+        </span>
         <div v-else-if="signedIn && articlesOnCart.length > 0" id="shopping-card-list"
              class="al-s-stretch column al-s-stretch">
             <span class="al-s-center">Warenkorb</span>
