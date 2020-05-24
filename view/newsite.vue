@@ -15,7 +15,7 @@
     <site-header-component :signed-in="user" v-on:sign-in="updateUser"
                            v-on:search="findArticles"></site-header-component>
     <div class="grow-1 row">
-        <site-nav-bar-component v-on:router="choose" :colors='colors'></site-nav-bar-component>
+        <site-nav-bar-component :signed-in="user" v-on:router="choose" :colors='colors'></site-nav-bar-component>
         <start-component v-if="choice === 0"></start-component>
         <all-articles-component v-else-if="choice === 10"
                                 :signed-in="user" :buyable-articles="articles"
@@ -23,6 +23,7 @@
                                 v-on:add="addToCart" v-on:remove="removeFromCart"
                                 v-on:limit="setLimit" v-on:categroy="setCategory"
                                 v-on:set-site="updateSite"></all-articles-component>
+        <my-articles-component v-else-if="choice === 11" :signed-in="user"></my-articles-component>
         <category-component v-else-if="choice === 2" :colors='colors'></category-component>
     </div>
 </div>
@@ -102,25 +103,22 @@
                     <option value="0">Alle</option>
                 </select>
             </div>
-            <button class="icon-button white-icon" :class="{'disabled': !backwardsAllowed}" :disabled="!backwardsAllowed" @click="backward">
+            <button class="icon-button white-icon" :class="{'disabled': !backwardsAllowed}"
+                    :disabled="!backwardsAllowed" @click="backward">
                 <i class="fas fa-angle-left"></i>
             </button>
             <span class="white-icon">Seite: {{site}}</span>
-            <button class="icon-button white-icon" :class="{'disabled': !forwardsAllowed}" :disabled="!forwardsAllowed" @click="forward">
+            <button class="icon-button white-icon" :class="{'disabled': !forwardsAllowed}" :disabled="!forwardsAllowed"
+                    @click="forward">
                 <i class="fas fa-angle-right"></i>
             </button>
             <div class="row jc-end" style="width: 15%">
-            <select v-model="category" @change="selectCat">
-                <option value="all">Kategorien</option>
-                <optgroup label="Swedish Cars">
-                    <option value="volvo">Volvo</option>
-                    <option value="saab">Saab</option>
-                </optgroup>
-                <optgroup label="German Cars">
-                    <option value="mercedes">Mercedes</option>
-                    <option value="audi">Audi</option>
-                </optgroup>
-            </select>
+                <select v-model="category" @change="selectCat">
+                    <option value="all">Alle Kategorien</option>
+                    <optgroup v-for="parent in categories" :label="parent.parent">
+                        <option v-for="child in parent.children" :value="child.id">{{child.ab_name}}</option>
+                    </optgroup>
+                </select>
             </div>
         </div>
         <span v-if="signedIn && articlesOnCart.length === 0" id="shopping-card-null">
@@ -168,6 +166,37 @@
                 </td>
             </tr>
         </table>
+    </div>
+</script>
+
+<script type="text/x-template" id="my-articles-component">
+    <div id="content" class="card grow-1 column al-stretch">
+        <div class="backGreen articles-head column">
+            <div class="row jc-between al-center" @click="showHide(0)">
+                <span>Neuer Artikel</span>
+                    <i v-if="showCreate" class="fas fa-angle-up"></i>
+                    <i v-else class="fas fa-angle-down"></i>
+            </div>
+            <div class="column" v-if="showCreate">g</div>
+        </div>
+        <div class="backYellow articles-head column">
+            <div class="row jc-between al-center" @click="showHide(1)">
+                <span>Meine Artikel</span>
+                    <i v-if="showMy" class="fas fa-angle-up"></i>
+                    <i v-else class="fas fa-angle-down"></i>
+            </div>
+            <div class="column" v-if="showMy">
+                <div v-for="elem in articles">{{elem.ab_name}}</div>
+            </div>
+        </div>
+        <div class="backRed articles-head column">
+            <div class="row jc-between al-center" @click="showHide(2)">
+                <span>gelöschte Artikel</span>
+                    <i v-if="showDeleted" class="fas fa-angle-up"></i>
+                    <i v-else class="fas fa-angle-down"></i>
+            </div>
+            <div class="column" v-if="showDeleted">g</div>
+        </div>
     </div>
 </script>
 <script src="../js/application.js"></script>
