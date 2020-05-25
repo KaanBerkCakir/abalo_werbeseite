@@ -403,11 +403,11 @@ new Vue({
                     const xhr2 = new XMLHttpRequest();
                     xhr2.open('GET', 'http://localhost:8000/api/shoppingcarts/' + this.toolbar.signedIn);
                     xhr2.onload = () => {
-                        cart = JSON.parse(xhr2.response);
+                        cart = JSON.parse(xhr2.response).cart;
                         const xhr3 = new XMLHttpRequest();
                         xhr3.open('GET', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles');
                         xhr3.onload = () => {
-                            this.lists.cart = JSON.parse(xhr3.response);
+                            this.lists.cart = JSON.parse(xhr3.response).articles;
                             this.updateLists();
                         }
                         xhr3.send();
@@ -438,7 +438,7 @@ new Vue({
         loadArticles: function(input, limit) {
             const xhr = new XMLHttpRequest();
             if(limit) {
-                xhr.open('GET', 'http://localhost:8000/api/articles/' + input + '/limit/' + limit);
+                xhr.open('GET', 'http://localhost:8000/api/articles/' + input + '/limit/' + limit + '/offset/0');
             }else {
                 xhr.open('GET', 'http://localhost:8000/api/articles/' + input);
             }
@@ -480,7 +480,7 @@ new Vue({
             const xhr = new XMLHttpRequest();
             xhr.open('DELETE', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles/' + id);
             xhr.onload = () => {
-                this.lists.cart = JSON.parse(xhr.response);
+                this.lists.cart = JSON.parse(xhr.response).articles;
                 this.updateLists();
             }
             xhr.send();
@@ -490,7 +490,9 @@ new Vue({
                 const xhr = new XMLHttpRequest();
                 xhr.open('POST', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles/' + id);
                 xhr.onload = () => {
-                    this.lists.cart = JSON.parse(xhr.response);
+                    console.log(xhr.response);
+                    this.lists.cart = JSON.parse(xhr.response).articles;
+                    console.log(this.lists.cart);
                     this.updateLists();
                 }
                 xhr.send();
@@ -500,8 +502,8 @@ new Vue({
         },
         updateLists: function () {
             this.lists.articles = [];
+            const tmp = this.lists.cart;
             reqArticles.forEach(elem => {
-                const tmp = this.lists.cart;
                 if(!cartContains(tmp, elem.id)){
                     this.lists.articles.push(elem);
                 }
