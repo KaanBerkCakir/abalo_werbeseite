@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    Vue.component('button-hoch', {
+        props: ['count'],
+        template: '<button v-on:click="count++">[+]</button>',
+
+    });
+
+    Vue.component('button-runter', {
+        props: ['count'],
+        methods: {
+            sub: function() {
+                this.$emit('sub', this.count-1);
+            }
+        },
+        template: '<button v-on:click="sub">[-]</button>'
+    });
+
+    new Vue({
+        el: '#components-demo',
+        data: {
+            count: 1
+        },
+        methods: {
+            setCounter: function(counter) {
+                console.log(counter);
+                this.count = counter;
+            }
+        }
+    });
+</script>
+</body>
+</html>

@@ -10,7 +10,7 @@
 </head>
 <body>
 <div id="app">
-{{message}}  {{message2}}
+{{message}}  {{message2 | grossschreiber}}
 </div>
 <script>
     let vm = new Vue({
@@ -19,6 +19,13 @@
             message: 'HALLO WELT!',
             message2: 'hallo welt'
         }
+    });
+    Vue.filter('grossschreiber', function (value) {
+        if (!value) {
+            return '';
+        }
+        value = value.charAt(1).toString();
+        return value.toUpperCase()
     });
 </script>
 </body>

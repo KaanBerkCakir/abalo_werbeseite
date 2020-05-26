@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+</head>
+<body>
+
+<div id="components-demo">
+    <button-hoch :count="count"></button-hoch>
+    {{count}}
+    <button-runter :count="count" v-on:sub="setCounter"></button-runter>
+
+</div>
+
+<script>
+    Vue.component('button-hoch', {
+        props: ['count'],
+        template: '<button v-on:click="count++">[+]</button>',
+
+    });
+
+    Vue.component('button-runter', {
+        props: ['count'],
+        methods: {
+          sub: function() {
+              this.$emit('sub', this.count-1);
+          }
+        },
+        template: '<button v-on:click="sub">[-]</button>'
+    });
+
+    new Vue({
+        el: '#components-demo',
+        data: {
+            count: 1
+        },
+        methods: {
+            setCounter: function(counter) {
+                console.log(counter);
+                this.count = counter;
+            }
+        }
+    });
+</script>
+</body>
+</html>
