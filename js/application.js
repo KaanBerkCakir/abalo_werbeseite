@@ -1,152 +1,4 @@
 /*
-const inputSearch = document.getElementById('searchText');
-const userButton = document.getElementById('user-button');
-const contentContainer = document.getElementById('content');
-const hiddenBox = document.getElementById('hiddenBox');
-const menuElem = document.getElementById('menu');
-
-const color = ['backBlue', 'backGreen', 'backRed', 'backYellow'];
-
-var shopIsShown = false;
-var companyIsShown = false;
-var menuHTML = '';
-var signedIn;
-
-menuJSON.forEach((item, itemIndex) => {
-    menuHTML += '<span id="item' + itemIndex + '" class="item link" onclick="chooseMenu(' + itemIndex + ')">' + item.item + '</span>';
-    if (item.subitems.length > 0) {
-        item.subitems.forEach((subitem, subitemIndex) => {
-            menuHTML += '<span id="subitem' + itemIndex + subitemIndex + '" class="subitem link hidden ' + color[itemIndex % 4] + '" onclick="chooseMenu(' + itemIndex + subitemIndex + ')">' + subitem + '</span>';
-        });
-    }
-});
-
-inputSearch.addEventListener("keyup", function (event) {
-    if (event.key === "Enter") {
-        requestArticles(inputSearch.value);
-        inputSearch.value = '';
-    }
-});
-
-function initView() {
-    // localStorage.removeItem('cookieconsent');
-    if (!isConsentGiven()) {
-        signedIn = null;
-        localStorage.removeItem('user');
-        localStorage.removeItem('cart');
-    } else {
-        signedIn = localStorage.getItem('user') === null ? null : localStorage.getItem('user');
-        cartId = localStorage.getItem('cart') === null ? null : localStorage.getItem('cart');
-    }
-    updateUserButton();
-
-    menuElem.innerHTML = menuHTML;
-    loadHomeView();
-}
-
-function chooseMenu(num) {
-    switch (num) {
-        case 0:
-            loadHomeView();
-            break;
-        case 1:
-            if (shopIsShown) {
-                shopIsShown = false;
-                hideSubitems(num);
-            } else {
-                shopIsShown = true;
-                showSubitems(num);
-            }
-            break;
-        case 10:
-            loadArticleListView();
-            break;
-        case 11:
-            loadCreateArticleView();
-            break;
-        case 2:
-            loadCategoriesView();
-            break;
-        case 3:
-            if (companyIsShown) {
-                companyIsShown = false;
-                hideSubitems(num);
-            } else {
-                companyIsShown = true;
-                showSubitems(num);
-            }
-            break;
-        case 30:
-            // goto philosophie
-            break;
-        case 31:
-            // open karriere
-            break;
-    }
-}
-
-function hideSubitems(num) {
-    const length = menuJSON[num].subitems.length;
-    for (let i = 0; i < length; i++) {
-        document.getElementById('subitem' + num + i).classList.add('hidden');
-    }
-}
-
-function showSubitems(num) {
-    const length = menuJSON[num].subitems.length;
-    for (let i = 0; i < length; i++) {
-        document.getElementById('subitem' + num + i).classList.remove('hidden');
-    }
-}
-
-function loadHomeView() {
-    setActive('item0');
-    loadFile('../vue/start.html');
-}
-
-function loadCategoriesView() {
-    setActive('item2');
-    loadFile('../vue/categories.vue');
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:8000/api/categories');
-    xhr.onload = () => {
-        var vm = new Vue({
-            el: '#content',
-            data: {
-                categories: JSON.parse(xhr.response),
-                colors: color
-            }
-        });
-    }
-    xhr.onerror = function () {
-    };
-    xhr.send();
-}
-
-function loadFile(url) {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', url+'?rand='+(Math.random() * 100));
-    xhr.onload = () => {
-        contentContainer.innerHTML = xhr.responseText;
-    }
-    xhr.onerror = function () {
-    };
-    xhr.send();
-}
-
-function requestArticles(input) {
-    setActive('subitem10');
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:8000/api/article/' + input);
-    xhr.onload = () => {
-        articlesArray = JSON.parse(xhr.response);
-        console.log(articlesArray);
-    }
-    xhr.onerror = function () {
-    };
-    xhr.send();
-}
-
 function updateLists() {
     shownArticles = [];
     articlesArray.forEach(articlesElem => {
@@ -317,19 +169,7 @@ function userInteraction() {
 }
 
 function login() {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:8000/authentification/login');
-    xhr.withCredentials = true;
-    xhr.onload = () => {
-        signedIn = JSON.parse(xhr.response).user;
-        if (isConsentGiven()) {
-            localStorage.setItem('user', signedIn);
-        }
-        updateUserButton();
-    }
-    xhr.onerror = function () {
-    };
-    xhr.send();
+
 }
 
 function logout() {
@@ -357,7 +197,7 @@ const menuJSON = [
     },
     {
         item: 'Shop',
-        subitems: ['Stöbern', 'Anbieten']
+        subitems: ['Stöbern', 'Meine Artikel']
     },
     {
         item: 'Kategorien',
@@ -368,147 +208,382 @@ const menuJSON = [
         subitems: ['Philosophie', 'Karriere']
     },
 ];
-var cart;
-var reqArticles = [];
+var allArticles = [];
 
-new Vue({
-    el: '#container',
-    data: {
-        start: true,
-        toolbar: {
-            signedIn: null,
-            search: null,
-        },
-        menu: {
-            hide: [false, false, false, true],
-            colors: ['backBlue', 'backGreen', 'backRed', 'backYellow'],
-            items: menuJSON,
-        },
-        lists: {
-            cart: [],
-            articles: [],
-        },
+
+Vue.component('SiteHeaderComponent', {
+    props: ['signed-in'],
+    data: function () {
+        return {
+            search: ""
+        }
     },
     methods: {
-        getNames: function () {
-            if (this.toolbar.search.length > 2) {
-                this.loadArticles(this.toolbar.search, 5);
+        searchForNames: function () {
+            if (this.search.length === 0) {
+                this.$emit('%', this.search, 5);
+            } else if (this.search.length > 2) {
+                this.$emit('search', this.search, 5);
             }
         },
-        userInteraction:  function (login) {
-            const xhr = new XMLHttpRequest();
+        userInteraction: function (login) {
             if (login) {
+                const xhr = new XMLHttpRequest();
                 xhr.open('GET', 'http://localhost:8000/authentification/login');
+                xhr.withCredentials = true;
                 xhr.onload = () => {
-                    this.toolbar.signedIn = JSON.parse(xhr.response).user;
-                    const xhr2 = new XMLHttpRequest();
-                    xhr2.open('GET', 'http://localhost:8000/api/shoppingcarts/' + this.toolbar.signedIn);
-                    xhr2.onload = () => {
-                        cart = JSON.parse(xhr2.response);
-                        const xhr3 = new XMLHttpRequest();
-                        xhr3.open('GET', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles');
-                        xhr3.onload = () => {
-                            this.lists.cart = JSON.parse(xhr3.response);
-                            this.updateLists();
-                        }
-                        xhr3.send();
-                    }
-                    xhr2.send();
+                    this.$emit('sign-in', JSON.parse(xhr.response).user);
                 }
+                xhr.onerror = function () {
+                };
+                xhr.send();
             } else {
+                const xhr = new XMLHttpRequest();
                 xhr.open('GET', 'http://localhost:8000/authentification/logout');
+                xhr.withCredentials = true;
                 xhr.onload = () => {
-                    cart = null;
-                    this.toolbar.signedIn = null;
-                    this.lists.cart = [];
-                    this.updateLists();
+                    this.$emit('sign-in', "");
                 }
+                xhr.onerror = function () {
+                };
+                xhr.send();
             }
-            xhr.withCredentials = true;
-            xhr.onerror = function () {
-            };
-            xhr.send();
-        },
-        total: function() {
-            let res = 0;
-            this.lists.cart.forEach(elem => {
-                res += elem.ab_price;
-            });
-            return res;
-        },
-        loadArticles: function(input, limit) {
-            const xhr = new XMLHttpRequest();
-            if(limit) {
-                xhr.open('GET', 'http://localhost:8000/api/articles/' + input + '/limit/' + limit);
-            }else {
-                xhr.open('GET', 'http://localhost:8000/api/articles/' + input);
-            }
-            xhr.onload = () => {
-                this.start = false;
-                reqArticles = JSON.parse(xhr.response);
-                this.updateLists();
-            }
-            xhr.send();
-        },
+        }
+    },
+    template: '#site-header-component'
+});
+
+Vue.component('SiteNavBarComponent', {
+    props: ['colors', 'signed-in'],
+    data: function () {
+        return {
+            choice: 0,
+            hide: [false, true, false, true],
+            items: menuJSON,
+        }
+    },
+    methods: {
         chooseMenu: function (num) {
+            const tmp = [...this.hide];
             switch (num) {
                 case 0:
-                    this.start = true;
+                    this.choice = num;
+                    this.$emit('router', num);
                     break;
                 case 1:
-                    this.hide[num] = !this.hide[num];
+                    tmp[num] = !tmp[num];
+                    this.hide = tmp;
                     break;
                 case 10:
-                    this.loadArticles('%');
+                    this.choice = num;
+                    this.$emit('router', num);
                     break;
                 case 11:
-                    loadCreateArticleView();
+                    if (this.signedIn) {
+                        this.choice = num;
+                        this.$emit('router', num);
+                    } else {
+                        alert('Anmelden');
+                    }
                     break;
                 case 2:
+                    this.choice = num;
+                    this.$emit('router', num);
                     break;
                 case 3:
-
+                    tmp[num] = !tmp[num];
+                    this.hide = tmp;
                     break;
                 case 30:
+                    this.choice = num;
+                    this.$emit('router', num);
                     // goto philosophie
                     break;
                 case 31:
+                    this.choice = num;
+                    this.$emit('router', num);
                     // open karriere
                     break;
             }
         },
-        removeItem: function(id) {
+    },
+    template: '#site-nav-bar-component'
+});
+
+Vue.component('StartComponent', {
+    data: function () {
+        return {}
+    },
+    methods: {},
+    template: '#start-component'
+});
+
+Vue.component('AllArticlesComponent', {
+    props: ['signedIn',
+        'articlesOnCart',
+        'buyableArticles',
+        'max'
+    ],
+    data: function () {
+        return {
+            limit: 5,
+            category: 'all',
+            categories: [],
+            site: 1,
+            backwardsAllowed: false,
+            forwardsAllowed: true
+        }
+    },
+    created: function () {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://localhost:8000/api/categories');
+        xhr.onload = () => {
+            this.categories = JSON.parse(xhr.response).categories;
+        }
+        xhr.onerror = function () {
+        };
+        xhr.send();
+
+    },
+    methods: {
+        addItem: function (id) {
+            this.$emit('add', id);
+        },
+        removeItem: function (id) {
+            this.$emit('remove', id);
+        },
+        total: function () {
+            let sum = 0;
+            this.articlesOnCart.forEach(elem => {
+                sum += elem.ab_price;
+            });
+            return sum;
+        },
+        selectLim: function () {
+            this.site = 1;
+            this.backwardsAllowed = false;
+            this.forwardsAllowed = this.max > (this.site * this.limit);
+            this.$emit('limit', this.limit);
+        },
+        backward: function () {
+            this.site--;
+            this.$emit('set-site', this.site);
+            this.forwardsAllowed = true;
+            this.backwardsAllowed = this.site > 1;
+        },
+        forward: function () {
+            this.site++;
+            this.$emit('set-site', this.site);
+            this.backwardsAllowed = true;
+            this.forwardsAllowed = this.max > this.site * this.limit;
+        },
+        selectCat: function () {
+            this.$emit('categroy', this.category);
+        }
+    },
+    watch: {
+        max: function () {
+            this.site = 1;
+            this.backwardsAllowed = false;
+            this.forwardsAllowed = this.max > this.limit;
+        }
+    },
+    template: '#all-articles-component'
+});
+
+Vue.component('MyArticlesComponent', {
+    props : ['signed-in'],
+    data: function () {
+        return {
+            showCreate: false,
+            showMy: false,
+            showDeleted: false,
+            articles: []
+        };
+    },
+    created: function () {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://localhost:8000/api/articles/user/' + this.signedIn);
+        xhr.onload = () => {
+            this.articles = JSON.parse(xhr.response).articles;
+        }
+        xhr.send();
+    },
+    methods: {
+        showHide: function (num) {
+            switch (num) {
+                case 0:
+                    this.showCreate = !this.showCreate;
+                    break;
+                case 1:
+                    this.showMy = !this.showMy;
+                    break;
+                case 2:
+                    this.showDeleted = !this.showDeleted;
+                    break;
+            }
+        }
+    },
+    template: '#my-articles-component'
+});
+
+Vue.component('CategoryComponent', {
+    props: ['colors'],
+    created: function () {
+        this.fetchCategories();
+    },
+    data: function () {
+        return {
+            categories: []
+        }
+    },
+    methods: {
+        fetchCategories: function () {
             const xhr = new XMLHttpRequest();
-            xhr.open('DELETE', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles/' + id);
+            xhr.open('GET', 'http://localhost:8000/api/categories');
             xhr.onload = () => {
-                this.lists.cart = JSON.parse(xhr.response);
-                this.updateLists();
+                this.categories = JSON.parse(xhr.response).categories;
+            }
+            xhr.onerror = function () {
+            };
+            xhr.send();
+        }
+    },
+    template: '#category-component'
+});
+
+new Vue({
+    el: '#container',
+    data: {
+        choice: 0,
+        colors: ['backBlue', 'backGreen', 'backRed', 'backYellow'],
+        input: "%",
+        user: "",
+        cart: [],
+        articles: [],
+        limit: 5,
+        category: 'all',
+        site: 1,
+        amount: 0
+    },
+    methods: {
+        choose: function (link) {
+            this.choice = link;
+            if (link === 10) {
+                this.input = '%';
+                this.site = 1;
+                this.limit = 5;
+                this.category = 'all';
+                this.fetchArticles();
+            }
+        },
+        updateUser: function (user) {
+            this.site = 1;
+            if (user) {
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', 'http://localhost:8000/api/shoppingcarts/' + user);
+                xhr.onload = () => {
+                    localStorage.setItem('cart', JSON.stringify(JSON.parse(xhr.response).cart));
+                    this.user = user;
+
+                    if (this.choice === 10) {
+                        xhr.open('GET', 'http://localhost:8000/api/shoppingcarts/' + JSON.parse(xhr.response).cart.id + '/articles');
+                        xhr.onload = () => {
+                            this.cart = JSON.parse(xhr.response).articles;
+                            this.updateArticleList();
+                        }
+                        xhr.send();
+                    }
+                }
+                xhr.onerror = function () {
+
+                };
+                xhr.send();
+            } else {
+                localStorage.setItem('cart', "");
+                this.user = user;
+            }
+        },
+        findArticles: function (input, limit) {
+            this.site = 1;
+            this.choice = 10;
+            this.input = input;
+            this.fetchArticles();
+        },
+        fetchArticles: function () {
+            const xhr = new XMLHttpRequest();
+            const offset = (this.site * this.limit) - this.limit;
+            xhr.open('GET', 'http://localhost:8000/api/articles/' + this.input + '/limit/' + this.limit + '/offset/' + offset);
+            xhr.onload = () => {
+                allArticles = JSON.parse(xhr.response).articles;
+                this.amount = JSON.parse(xhr.response).amount;
+                if (!this.user) {
+                    this.articles = allArticles;
+                } else {
+                    const cart = JSON.parse(localStorage.getItem('cart'));
+                    xhr.open('GET', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles');
+                    xhr.onload = () => {
+                        this.cart = JSON.parse(xhr.response).articles;
+                        this.updateArticleList();
+                    }
+                    xhr.send();
+                }
+            }
+            xhr.onerror = () => {
+                this.cart = [];
+                this.articles = [];
             }
             xhr.send();
         },
-        addItem: function(id) {
-            if(this.toolbar.signedIn) {
+        addToCart: function (id) {
+            if (this.user) {
+                cart = JSON.parse(localStorage.getItem('cart'));
                 const xhr = new XMLHttpRequest();
                 xhr.open('POST', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles/' + id);
                 xhr.onload = () => {
-                    this.lists.cart = JSON.parse(xhr.response);
-                    this.updateLists();
+                    this.cart = JSON.parse(xhr.response).articles;
+                    this.updateArticleList();
                 }
+                xhr.onerror = function () {
+                };
                 xhr.send();
-            }else {
-                alert('Du musst dafür angemeldet sein.');
+            } else {
+                alert('Sie müssen sich zuerst anmelden');
             }
         },
-        updateLists: function () {
-            this.lists.articles = [];
-            reqArticles.forEach(elem => {
-                const tmp = this.lists.cart;
-                if(!cartContains(tmp, elem.id)){
-                    this.lists.articles.push(elem);
+        removeFromCart: function (id) {
+            cart = JSON.parse(localStorage.getItem('cart'));
+            const xhr = new XMLHttpRequest();
+            xhr.open('DELETE', 'http://localhost:8000/api/shoppingcarts/' + cart.id + '/articles/' + id);
+            xhr.onload = () => {
+                this.cart = JSON.parse(xhr.response).articles;
+                this.updateArticleList();
+            }
+            xhr.onerror = function () {
+            };
+            xhr.send();
+        },
+        updateArticleList: function () {
+            this.articles = [];
+            allArticles.forEach(elem => {
+                if (!cartContains(this.cart, elem.id)) {
+                    this.articles.push(elem);
                 }
             });
+        },
+        setLimit: function (limit) {
+            this.site = 1;
+            this.limit = limit;
+            this.fetchArticles();
+        },
+        updateSite: function (site) {
+            this.site = site;
+            this.fetchArticles();
+        },
+        setCategory: function (category) {
+            console.log(category);
         }
-    },
+    }
 });
 
 function cartContains(cart, id) {
