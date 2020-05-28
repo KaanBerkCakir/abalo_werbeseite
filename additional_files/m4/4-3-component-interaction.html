@@ -3,27 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
+<div id="C">
+    {{count}}
+    <a-c></a-c>
+</div>
 <script>
-    Vue.component('button-hoch', {
-        props: ['count'],
-        template: '<button v-on:click="count++">[+]</button>',
+    Vue.component('AC', {
+
+        template: '<b-c></b-c>',
 
     });
 
-    Vue.component('button-runter', {
-        props: ['count'],
-        methods: {
-            sub: function() {
-                this.$emit('sub', this.count-1);
-            }
-        },
-        template: '<button v-on:click="sub">[-]</button>'
+    Vue.component('BC', {
+
+        template: '<p>B</p>',
+
     });
+
+
 
     new Vue({
-        el: '#components-demo',
+        el: '#C',
         data: {
             count: 1
         },
@@ -32,6 +35,7 @@
                 console.log(counter);
                 this.count = counter;
             }
+
         }
     });
 </script>

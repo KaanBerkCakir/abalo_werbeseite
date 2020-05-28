@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-
 </head>
 <body>
-
 <div id="components-demo">
     <button-hoch :count="count" v-on:add="setCounter"></button-hoch>
     {{count}}
@@ -20,7 +18,9 @@
         props: ['count'],
         methods: {
             add: function() {
-                this.$emit('add', this.count+1);
+                if(this.count < 10) {
+                    this.$emit('add', this.count + 1);
+                }
             }
         },
         template: '<button v-on:click="add">[+]</button>',
@@ -30,9 +30,11 @@
     Vue.component('button-runter', {
         props: ['count'],
         methods: {
-          sub: function() {
-              this.$emit('sub', this.count-1);
-          }
+            sub: function() {
+                if(this.count > 1) {
+                    this.$emit('sub', this.count - 1);
+                }
+            }
         },
         template: '<button v-on:click="sub">[-]</button>'
     });
